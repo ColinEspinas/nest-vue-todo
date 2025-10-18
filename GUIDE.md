@@ -88,7 +88,7 @@ npm run dev
 ```
 
 Cette commande démarre automatiquement :
-- Le backend sur http://localhost:3000
+- Le backend sur http://localhost:3001
 - Le frontend sur http://localhost:5173
 
 ### Option 2 : Démarrer les applications séparément
@@ -99,7 +99,7 @@ cd apps/backend
 npm run start:dev
 ```
 
-Le serveur démarre sur http://localhost:3000
+Le serveur démarre sur http://localhost:3001
 
 #### Frontend
 ```bash
