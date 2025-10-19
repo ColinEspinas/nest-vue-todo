@@ -5,24 +5,30 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../views/landing-view.vue'),
-    },
-    {
-      path: '/sign-in',
-      name: 'sign-in',
-      component: () => import('../views/auth/sign-in-view.vue'),
-    },
-    {
-      path: '/sign-up',
-      name: 'sign-up',
-      component: () => import('../views/auth/sign-up-view.vue'),
-    },
-    {
-      path: '/tasks',
-      name: 'tasks',
-      component: () => import('../views/tasks-view.vue'),
-      meta: { requiresAuth: true },
+      component: () => import('../layouts/default-layout.vue'),
+      children: [
+        {
+          path: '/',
+          name: 'home',
+          component: () => import('../views/landing-view.vue'),
+        },
+        {
+          path: '/sign-in',
+          name: 'sign-in',
+          component: () => import('../views/auth/sign-in-view.vue'),
+        },
+        {
+          path: '/sign-up',
+          name: 'sign-up',
+          component: () => import('../views/auth/sign-up-view.vue'),
+        },
+        {
+          path: '/tasks',
+          name: 'tasks',
+          component: () => import('../views/tasks-view.vue'),
+          meta: { requiresAuth: true },
+        },
+      ],
     },
   ],
 });
