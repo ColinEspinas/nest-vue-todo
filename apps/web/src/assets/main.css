@@ -1,1 +1,24 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  --color-accent: rgb(87, 74, 226);
+  --color-accent-content: rgb(255, 255, 255);
+  --color-base-100: rgb(255, 255, 255);
+  --color-base-200: rgb(245, 245, 245);
+  --color-base-300: rgb(230, 230, 230);
+  --color-base-content-100: rgb(0, 0, 0);
+  --color-base-content-200: rgb(80, 80, 80);
+  --color-base-content-300: rgb(130, 130, 130);
+  --color-success: rgb(127, 255, 0);
+  --color-error: rgb(244, 67, 54);
+
+  --font-sans: 'Work Sans Variable', sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-base-100);
+    color: var(--color-base-content-100);
+    font-family: var(--font-sans);
+  }
+}

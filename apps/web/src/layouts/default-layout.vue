@@ -1,17 +1,12 @@
+<script setup lang="ts">
+import AppNavbar from '@/components/app/app-navbar.vue';
+</script>
+
 <template>
-  <header>
-    <nav>
-      <ul>
-        <li><RouterLink to="/">Home</RouterLink></li>
-        <li><RouterLink to="/about">About</RouterLink></li>
-        <li><RouterLink to="/contact">Contact</RouterLink></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <RouterView />
-  </main>
-  <footer>
-    <p>&copy; 2024 My Website</p>
-  </footer>
+  <div class="max-w-[600px] mx-auto p-4">
+    <AppNavbar class="mb-4" />
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>

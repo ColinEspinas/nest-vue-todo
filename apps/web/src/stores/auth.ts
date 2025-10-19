@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { useAuthApi } from '@/composables/api/use-auth-api';
 import type { NewUser, User } from '@/types/user';
@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = useLocalStorage<string | null>('token', null);
   const user = ref<User | null>(null);
 
-  const isAuthenticated = computed(() => !!token.value);
+  const isAuthenticated = computed(() => !!token.value && !!user.value);
 
   const login = async (email: string, password: string) => {
     const { data, error } = await api.login(email, password);
@@ -39,23 +39,15 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null;
   };
 
-  const fetchCurrentUser = async () => {
+  const restore = async () => {
     if (!token.value) return;
-
-    const { data, error } = await api.getCurrentUser();
-
-    if (error.value) {
+    try {
+      const { data } = await api.getCurrentUser();
+      user.value = data.value ?? null;
+    } catch {
       logout();
-      return;
     }
-
-    user.value = data.value || null;
   };
-
-  watch(token, (newToken) => {
-    if (!newToken) user.value = null;
-    else fetchCurrentUser();
-  });
 
   return {
     token,
@@ -64,6 +56,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    fetchCurrentUser,
+    restore,
   };
 });

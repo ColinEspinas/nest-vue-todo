@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import UiButton from '@/components/ui/ui-button.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -10,33 +11,42 @@ const email = ref('');
 const password = ref('');
 
 const login = async () => {
-  // Handle login logic here
-  console.log('Logging in with', email.value, password.value);
   await authStore.login(email.value, password.value);
   router.push({ name: 'tasks' });
 };
 </script>
 
 <template>
-  <div>
-    <form @submit.prevent="login">
-      <h1>Sign In</h1>
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" v-model="email" required class="border-1" />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          v-model="password"
-          required
-          class="border-1"
-        />
-      </div>
-      <button type="submit" class="border-1 bg-amber-500">Sign In</button>
+  <article class="flex flex-col gap-2 rounded-2xl border-1 border-base-300 p-5">
+    <h2 class="font-bold text-2xl">Se connecter</h2>
+
+    <p>Veuillez entrer vos identifiants pour vous connecter.</p>
+    <form class="flex flex-col gap-2" @submit.prevent="login">
+      <input
+        v-model="email"
+        type="email"
+        placeholder="Entrez votre adresse e-mail..."
+        class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+      />
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Entrez votre mot de passe..."
+        class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+      />
+      <UiButton
+        after-icon="ph:arrow-bend-up-right-bold"
+        text="Se connecter"
+        variant="accent"
+        class="min-w-max"
+        align="center"
+        type="submit"
+      />
     </form>
-  </div>
+
+    <p>
+      <span>Vous n'avez pas de compte ?&nbsp;</span>
+      <RouterLink to="/sign-up" class="text-accent">S'inscrire</RouterLink>
+    </p>
+  </article>
 </template>

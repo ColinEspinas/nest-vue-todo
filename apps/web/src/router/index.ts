@@ -9,24 +9,27 @@ const router = createRouter({
       children: [
         {
           path: '/',
-          name: 'home',
+          name: 'landing',
           component: () => import('../views/landing-view.vue'),
+          meta: { guestOnly: true },
         },
         {
           path: '/sign-in',
           name: 'sign-in',
           component: () => import('../views/auth/sign-in-view.vue'),
+          meta: { guestOnly: true },
         },
         {
           path: '/sign-up',
           name: 'sign-up',
           component: () => import('../views/auth/sign-up-view.vue'),
+          meta: { guestOnly: true },
         },
         {
           path: '/tasks',
           name: 'tasks',
           component: () => import('../views/tasks-view.vue'),
-          meta: { requiresAuth: true },
+          meta: { authOnly: true },
         },
       ],
     },

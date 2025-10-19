@@ -2,12 +2,16 @@
 import type { Router } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
-export default function setupGuards(router: Router) {
+export function setupGuards(router: Router) {
   router.beforeEach((to) => {
-    const authStore = useAuthStore();
+    const auth = useAuthStore();
 
-    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    if (to.meta.authOnly && !auth.isAuthenticated) {
       return { path: '/sign-in' };
+    }
+
+    if (to.meta.guestOnly && auth.isAuthenticated) {
+      return { path: '/tasks' };
     }
 
     return true;
