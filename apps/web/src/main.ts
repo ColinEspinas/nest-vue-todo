@@ -1,5 +1,5 @@
 import './assets/main.css';
-import '@fontsource-variable/work-sans/wght.css';
+import '@fontsource-variable/hanken-grotesk';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';

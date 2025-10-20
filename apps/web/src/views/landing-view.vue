@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main>Landing View</main>
+  <main>Page d'Accueil</main>
 </template>

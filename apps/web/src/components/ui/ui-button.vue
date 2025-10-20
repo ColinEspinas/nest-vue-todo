@@ -10,7 +10,7 @@ const props = withDefaults(
     beforeIcon?: string;
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
-    variant?: 'primary' | 'secondary' | 'accent' | 'glass' | 'ghost' | 'text';
+    variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'text';
     align?: 'left' | 'center' | 'right';
     size?: 'sm' | 'md' | 'lg';
     shape?: 'rounded' | 'default';

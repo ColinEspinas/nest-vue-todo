@@ -16,7 +16,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "@fontsource-variable/work-sans": "^5.2.8",
+    "@fontsource-variable/hanken-grotesk": "^5.2.8",
     "@tailwindcss/vite": "^4.1.14",
     "@vueuse/core": "^13.9.0",
     "pinia": "^3.0.3",
