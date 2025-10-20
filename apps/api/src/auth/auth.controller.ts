@@ -9,8 +9,9 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
-import { NewUserDTO } from 'src/users/dtos/new-user.dto';
+import { NewUserDTO } from '../users/dtos/new-user.dto';
 import { LoginDto } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PayloadUser } from './types/payload-user.type';
