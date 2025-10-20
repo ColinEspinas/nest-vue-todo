@@ -1,0 +1,22 @@
+PUT http://localhost:3000/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OGQzNDAwOC0wODc3LTQ1OWItOGQxNS0wMDc1ZjQ3NGJlMWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjA4ODU1MjQsImV4cCI6MTc2MDk3MTkyNH0.QVxX9Ce4k5M0VwOaOhdusCfhQ6h6Qn0QrH1jNVLEPCk
+
+{
+  "title": "Complete project documentation - Updated",
+  "completed": true
+}
+
+### Variables
+@taskId = 550e8400-e29b-41d4-a716-446655440000
+
+###
+
+PUT http://localhost:3000/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OGQzNDAwOC0wODc3LTQ1OWItOGQxNS0wMDc1ZjQ3NGJlMWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjA4ODU1MjQsImV4cCI6MTc2MDk3MTkyNH0.QVxX9Ce4k5M0VwOaOhdusCfhQ6h6Qn0QrH1jNVLEPCk
+
+{
+  "priority": "low",
+  "deadline": "2025-02-01T23:59:59.000Z"
+}

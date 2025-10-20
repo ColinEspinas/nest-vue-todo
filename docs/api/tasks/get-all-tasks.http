@@ -1,0 +1,3 @@
+GET http://localhost:3000/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyOTE4ZmJhZC0yYzdiLTQyOTEtYTAxNC0xMThmYTc0NjZjYzYiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjA5NjM4MjEsImV4cCI6MTc2MTA1MDIyMX0.a-Wa_UABB07t4-Ae2MvexyEVwe7fBeAfO8sNLeUIhL0
