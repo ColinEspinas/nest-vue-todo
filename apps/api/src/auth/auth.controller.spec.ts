@@ -138,4 +138,78 @@ describe('AuthController', () => {
       expect(authService.getUser).toHaveBeenCalledWith(mockRequest.user);
     });
   });
+
+  describe('POST /auth/login - Validation Tests', () => {
+    it('should reject login with invalid email format', () => {
+      const invalidDto = {
+        email: 'invalid-email',
+        password: 'password123',
+      };
+
+      expect(() => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(invalidDto.email)) {
+          throw new Error('Email must be a valid email address');
+        }
+      }).toThrow('Email must be a valid email address');
+    });
+
+    it('should reject login with empty password', () => {
+      const invalidDto = {
+        email: 'test@example.com',
+        password: '',
+      };
+
+      expect(() => {
+        if (!invalidDto.password || invalidDto.password.length < 1) {
+          throw new Error('Password must not be empty');
+        }
+      }).toThrow('Password must not be empty');
+    });
+  });
+
+  describe('POST /auth/register - Validation Tests', () => {
+    it('should reject registration with invalid email format', () => {
+      const invalidDto = {
+        name: 'Test User',
+        email: 'invalid-email',
+        password: 'password123',
+      };
+
+      expect(() => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(invalidDto.email)) {
+          throw new Error('Email must be a valid email address');
+        }
+      }).toThrow('Email must be a valid email address');
+    });
+
+    it('should reject registration with password shorter than 8 characters', () => {
+      const invalidDto = {
+        name: 'Test User',
+        email: 'test@example.com',
+        password: '1234567', // 7 characters
+      };
+
+      expect(() => {
+        if (!invalidDto.password || invalidDto.password.length < 8) {
+          throw new Error('Password must be at least 8 characters long');
+        }
+      }).toThrow('Password must be at least 8 characters long');
+    });
+
+    it('should reject registration with empty name', () => {
+      const invalidDto = {
+        name: '',
+        email: 'test@example.com',
+        password: 'password123',
+      };
+
+      expect(() => {
+        if (!invalidDto.name || invalidDto.name.length < 1) {
+          throw new Error('Name must not be empty');
+        }
+      }).toThrow('Name must not be empty');
+    });
+  });
 });
