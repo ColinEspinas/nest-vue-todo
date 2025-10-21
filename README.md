@@ -1,135 +1,265 @@
-# Turborepo starter
+# 📝 Todo App Vue + NestJS
 
-This Turborepo starter is maintained by the Turborepo core team.
+Une application de gestion de tâches simple et élégante construite avec **Vue 3** et **NestJS**. Ce projet open-source démontre l'utilisation moderne des technologies web avec TypeScript, une interface utilisateur propre et une architecture bien structurée.
 
-## Using this example
+## ✨ Fonctionnalités
 
-Run the following command:
+- 🔐 **Authentification** - Système d'auth JWT avec hachage bcrypt
+- 📋 **Gestion des tâches** - Créer, modifier, supprimer des tâches avec priorités et échéances
+- 🎨 **Interface moderne** - Vue 3 + Composition API avec Tailwind CSS
+- 📱 **Design responsive** - Fonctionne parfaitement sur mobile et desktop
+- ⚡ **États de chargement** - Skeleton loading pour une meilleure UX
+- ✅ **Validation** - Validation côté client avec Zod et retours visuels
+- 🏪 **Gestion d'état** - Stores Pinia pour l'état centralisé
 
-```sh
-npx create-turbo@latest
+## 🏗️ Architecture
+
+Ce projet utilise un monorepo Turborepo avec :
+
+### Applications
+
+- **`apps/api`** - API REST NestJS avec Prisma ORM
+- **`apps/web`** - Application Vue 3 avec TypeScript
+
+### Technologies utilisées
+
+**Backend :**
+
+- [NestJS](https://nestjs.com/) - Framework Node.js
+- [Prisma](https://prisma.io/) - ORM type-safe
+- [SQLite](https://sqlite.org/) - Base de données
+- [JWT](https://jwt.io/) - Authentification
+- [bcrypt](https://github.com/kelektiv/node.bcrypt.js/) - Hachage des mots de passe
+
+**Frontend :**
+
+- [Vue 3](https://vuejs.org/) - Framework JavaScript
+- [TypeScript](https://www.typescriptlang.org/) - Typage statique
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
+- [Reka UI](https://reka-ui.com/) - Composants UI
+- [Pinia](https://pinia.vuejs.org/) - Gestion d'état
+- [Zod](https://zod.dev/) - Validation de schémas
+- [Vite](https://vitejs.dev/) - Build tool
+
+**Outils de développement :**
+
+- [Turborepo](https://turbo.build/) - Monorepo
+- [ESLint](https://eslint.org/) - Linting
+- [Prettier](https://prettier.io) - Formatage
+
+## 🚀 Installation
+
+### Prérequis
+
+- Node.js >= 18
+- npm >= 10
+
+### Étapes
+
+1. **Cloner le projet**
+
+   ```bash
+   git clone <repository-url>
+   cd nest-vue-todo
+   ```
+
+2. **Installer les dépendances**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configurer la base de données**
+
+   ```bash
+   cd apps/api
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+4. **Variables d'environnement**
+
+   Créer `apps/api/.env` :
+
+   ```env
+   DATABASE_URL="file:./dev.db"
+   JWT_SECRET="votre-cle-secrete-jwt"
+   ```
+
+5. **Lancer l'application**
+
+   ```bash
+   # Depuis la racine
+   npm run dev
+   ```
+
+   L'application sera accessible à :
+   - API : `http://localhost:3000`
+   - Web : `http://localhost:5173`
+
+## 📖 Utilisation
+
+### API Endpoints
+
+**Authentification :**
+
+- `POST /auth/register` - Créer un compte
+- `POST /auth/login` - Se connecter
+- `GET /auth/me` - Infos utilisateur
+
+**Tâches :**
+
+- `GET /tasks` - Récupérer les tâches
+- `POST /tasks` - Créer une tâche
+- `PUT /tasks/:id` - Modifier une tâche
+- `DELETE /tasks/:id` - Supprimer une tâche
+
+### Fonctionnalités
+
+**Gestion des tâches :**
+
+- Créer des tâches avec titre, description et priorité (haute/moyenne/basse)
+- Définir des échéances optionnelles
+- Marquer comme terminé/en cours
+- Supprimer avec confirmation
+- Statistiques en temps réel
+
+**Interface :**
+
+- Validation de formulaires en temps réel
+- États de chargement skeleton
+- Design responsive
+- Tooltips informatifs
+
+## 🛠️ Développement
+
+### Commandes disponibles
+
+**Racine du projet :**
+
+```bash
+npm run dev          # Démarrer en mode développement
+npm run build        # Build pour production
+npm run lint         # Analyser le code
+npm run test         # Lancer les tests
+npm run format       # Formater avec Prettier
+npm run check-types  # Vérifier les types
 ```
 
-## What's inside?
+**API :**
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+cd apps/api
+npm run dev          # API en mode watch
+npm run build        # Build API
+npm run start:prod   # Démarrer en production
+npm run test         # Tests unitaires
+npm run test:e2e     # Tests end-to-end
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+**Web :**
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+cd apps/web
+npm run dev          # Serveur de dev Vite
+npm run build        # Build pour production
+npm run preview      # Prévisualiser le build
+npm run test:unit    # Tests unitaires
+npm run type-check   # Vérifier les types
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Base de données
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+```bash
+cd apps/api
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+# Créer une migration
+npx prisma migrate dev --name nom-migration
 
-### Remote Caching
+# Réinitialiser la DB
+npx prisma migrate reset
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+# Interface Prisma Studio
+npx prisma studio
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Générer le client
+npx prisma generate
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## 📁 Structure du projet
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+nest-vue-todo/
+├── apps/
+│   ├── api/                    # Backend NestJS
+│   │   ├── src/
+│   │   │   ├── auth/          # Module authentification
+│   │   │   ├── tasks/         # Module tâches
+│   │   │   ├── users/         # Module utilisateurs
+│   │   │   └── prisma.service.ts
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma  # Schéma DB
+│   │   │   └── migrations/    # Migrations
+│   │   └── test/              # Tests E2E
+│   └── web/                   # Frontend Vue 3
+│       ├── src/
+│       │   ├── components/    # Composants Vue
+│       │   ├── composables/   # Composables
+│       │   ├── stores/        # Stores Pinia
+│       │   ├── views/         # Pages
+│       │   └── types/         # Types TypeScript
+│       └── public/            # Assets statiques
+├── docs/                      # Documentation
+├── turbo.json                 # Config Turborepo
+└── package.json               # Package racine
 ```
 
-## Useful Links
+## 🎨 Composants
 
-Learn more about the power of Turborepo:
+L'application utilise un système de design modulaire :
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- **Composants de base** : Boutons, inputs, checkboxes réutilisables
+- **Composants métier** : Listes de tâches, formulaires, navigation
+- **Composants skeleton** : États de chargement
+- **Tags** : Indicateurs de priorité, échéances et statuts
+
+## � Sécurité
+
+- Mots de passe hachés avec bcrypt
+- Authentification JWT stateless
+- Validation côté client et serveur
+- Configuration CORS appropriée
+
+## 🧪 Tests
+
+- **Tests unitaires** : Jest (API) + Vitest (Frontend)
+- **Tests E2E** : Configuration complète pour l'API
+- **Vérification de types** : TypeScript en mode strict
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 🤝 Contribuer
+
+Les contributions sont les bienvenues ! Voici comment procéder :
+
+1. Forker le projet
+2. Créer une branche (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Commiter les changements (`git commit -am 'Ajouter une nouvelle fonctionnalité'`)
+4. Pousser vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrir une Pull Request
+
+## 🔗 Liens utiles
+
+- [Documentation NestJS](https://docs.nestjs.com/)
+- [Guide Vue 3](https://vuejs.org/guide/)
+- [Documentation Prisma](https://www.prisma.io/docs/)
+- [Documentation Turborepo](https://turbo.build/repo/docs)
+- [Documentation Tailwind CSS](https://tailwindcss.com/docs)
+
+---
+
+Fait avec ❤️ - Un projet open-source simple et propre
+
+</div>
