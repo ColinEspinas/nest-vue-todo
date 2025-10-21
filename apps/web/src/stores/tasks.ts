@@ -8,6 +8,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
   const tasks = ref<Task[]>([]);
   const loading = ref(false);
+  const creating = ref(false);
   const error = ref<string | null>(null);
   const loadingTasks = ref(new Set<string>());
 
@@ -68,20 +69,20 @@ export const useTasksStore = defineStore('tasks', () => {
   };
 
   const createTask = async (task: CreateTask) => {
-    loading.value = true;
     error.value = null;
+    creating.value = true;
 
     const { data, error: apiError } = await api.createTask(task);
     if (apiError.value) {
       error.value = 'Échec de la création de la tâche';
-      loading.value = false;
+      creating.value = false;
       return;
     }
 
     if (data.value) {
       tasks.value.unshift(data.value);
     }
-    loading.value = false;
+    creating.value = false;
     return data.value;
   };
 
@@ -152,6 +153,7 @@ export const useTasksStore = defineStore('tasks', () => {
     tasks,
     loading,
     error,
+    creating,
     completedTasks,
     pendingTasks,
     tasksByPriority,

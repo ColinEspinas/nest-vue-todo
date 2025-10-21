@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useTasksStore } from '@/stores/tasks';
 import TaskStats from '@/components/app/tasks/task-stats.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';
@@ -7,11 +7,31 @@ import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vu
 import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/tasks/task-create-form.vue';
+import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
 import type { CreateTask } from '@/types/task';
 import { storeToRefs } from 'pinia';
+import { useTimeoutFn } from '@vueuse/core';
 
 const tasksStore = useTasksStore();
-const { tasks, loading, error } = storeToRefs(tasksStore);
+const { tasks, loading, error, creating } = storeToRefs(tasksStore);
+
+const delayedLoading = ref(false);
+const { start, stop } = useTimeoutFn(
+  () => {
+    delayedLoading.value = true;
+  },
+  400,
+  { immediate: false },
+);
+
+watch(creating, (val) => {
+  if (val) {
+    start();
+  } else {
+    stop();
+    delayedLoading.value = false;
+  }
+});
 
 onMounted(async () => {
   try {
@@ -29,15 +49,30 @@ const handleToggleComplete = async (taskId: string) => {
   }
 };
 
-const handleDeleteTask = async (taskId: string) => {
-  if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+const handleDeleteTask = (taskId: string) => {
+  showDeleteDialog.value = true;
+  taskToDelete.value = taskId;
+};
+
+const confirmDeleteTask = async () => {
+  if (taskToDelete.value) {
     try {
-      await tasksStore.deleteTask(taskId);
+      await tasksStore.deleteTask(taskToDelete.value);
     } catch (error) {
       console.error('Failed to delete task:', error);
     }
   }
+  showDeleteDialog.value = false;
+  taskToDelete.value = null;
 };
+
+const closeDeleteDialog = () => {
+  showDeleteDialog.value = false;
+  taskToDelete.value = null;
+};
+
+const showDeleteDialog = ref(false);
+const taskToDelete = ref<string | null>(null);
 
 const handleSubmit = async (task: CreateTask) => {
   try {
@@ -53,7 +88,7 @@ const handleSubmit = async (task: CreateTask) => {
     <section
       class="mb-4 bg-base-200/50 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
     >
-      <TaskCreateForm @submit="handleSubmit" />
+      <TaskCreateForm @submit="handleSubmit" :loading="delayedLoading" />
     </section>
 
     <ErrorMessage v-if="error" :error="error" />
@@ -81,5 +116,11 @@ const handleSubmit = async (task: CreateTask) => {
         />
       </section>
     </div>
+
+    <TaskDeleteDialog
+      :open="showDeleteDialog"
+      @close="closeDeleteDialog"
+      @confirm="confirmDeleteTask"
+    />
   </main>
 </template>

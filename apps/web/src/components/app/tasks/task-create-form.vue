@@ -7,16 +7,17 @@ import { useFormValidation } from '@/composables/use-form-validation';
 import { createTaskSchema } from '@/schemas';
 import type { CreateTask } from '@/types/task';
 
-const title = ref('');
-const description = ref('');
-const priority = ref<'high' | 'medium' | 'low'>('medium');
-const deadline = ref<Date | null>(null);
+defineProps<{ loading?: boolean }>();
 
 const emit = defineEmits<{
   submit: [task: CreateTask];
 }>();
 
-const isSubmitting = ref(false);
+const title = ref('');
+const description = ref('');
+const priority = ref<'high' | 'medium' | 'low'>('medium');
+const deadline = ref<Date | null>(null);
+
 const { getError, hasError, validate } = useFormValidation(createTaskSchema);
 
 const handleSubmit = async () => {
@@ -31,18 +32,12 @@ const handleSubmit = async () => {
     return;
   }
 
-  isSubmitting.value = true;
+  emit('submit', formData);
 
-  try {
-    emit('submit', formData);
-
-    title.value = '';
-    description.value = '';
-    priority.value = 'medium';
-    deadline.value = null;
-  } finally {
-    isSubmitting.value = false;
-  }
+  title.value = '';
+  description.value = '';
+  priority.value = 'medium';
+  deadline.value = null;
 };
 </script>
 
@@ -102,7 +97,8 @@ const handleSubmit = async () => {
         text="Ajouter aux tâches"
         variant="accent"
         type="submit"
-        :disabled="isSubmitting"
+        :loading="loading"
+        :disabled="loading"
         after-icon="ph:arrow-bend-right-down-bold"
         class="w-full sm:w-auto"
       />
