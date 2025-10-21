@@ -43,6 +43,7 @@ describe('AuthService', () => {
           useValue: {
             findByEmail: jest.fn(),
             create: jest.fn(),
+            enrichUser: jest.fn(),
           },
         },
         {
@@ -93,14 +94,23 @@ describe('AuthService', () => {
   });
 
   describe('getUser', () => {
-    it('should return SafeUser when user exists', async () => {
+    const enrichedUser = {
+      id: mockUserId,
+      name: mockName,
+      email: mockEmail,
+      totalTasks: 5,
+      completedTasks: 3,
+    };
+
+    it('should return EnrichedUser when user exists and enrichment succeeds', async () => {
       usersService.findByEmail.mockResolvedValue(mockUser);
+      usersService.enrichUser.mockResolvedValue(enrichedUser);
 
       const result = await authService.getUser(mockPayloadUser);
 
-      expect(result).toEqual(mockSafeUser);
+      expect(result).toEqual(enrichedUser);
       expect(usersService.findByEmail).toHaveBeenCalledWith(mockEmail);
-      expect(usersService.findByEmail).toHaveBeenCalledTimes(1);
+      expect(usersService.enrichUser).toHaveBeenCalledWith(mockUser);
     });
 
     it('should throw NotFoundException when user does not exist', async () => {
@@ -110,6 +120,17 @@ describe('AuthService', () => {
         new NotFoundException('User not found'),
       );
       expect(usersService.findByEmail).toHaveBeenCalledWith(mockEmail);
+    });
+
+    it('should throw NotFoundException when enrichment fails', async () => {
+      usersService.findByEmail.mockResolvedValue(mockUser);
+      usersService.enrichUser.mockResolvedValue(null);
+
+      await expect(authService.getUser(mockPayloadUser)).rejects.toThrow(
+        new NotFoundException('Enriched user data not found'),
+      );
+      expect(usersService.findByEmail).toHaveBeenCalledWith(mockEmail);
+      expect(usersService.enrichUser).toHaveBeenCalledWith(mockUser);
     });
   });
 

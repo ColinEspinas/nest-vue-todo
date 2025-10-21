@@ -1,19 +1,19 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref, computed } from 'vue';
 import { useTasksApi } from '@/composables/api/use-tasks-api';
 import type { Task, CreateTask, UpdateTask } from '@/types/task';
+import { useAuthStore } from './auth';
 
 export const useTasksStore = defineStore('tasks', () => {
   const api = useTasksApi();
+  const authStore = useAuthStore();
+  const { totalTasksStat, completedTasksStat } = storeToRefs(authStore);
 
   const tasks = ref<Task[]>([]);
   const loading = ref(false);
   const creating = ref(false);
   const error = ref<string | null>(null);
-  const loadingTasks = ref(new Set<string>());
 
-  const completedTasks = computed(() => tasks.value.filter((task) => task.completed));
-  const pendingTasks = computed(() => tasks.value.filter((task) => !task.completed));
   const tasksByPriority = computed(() => ({
     high: tasks.value.filter((task) => task.priority === 'high'),
     medium: tasks.value.filter((task) => task.priority === 'medium'),
@@ -21,15 +21,6 @@ export const useTasksStore = defineStore('tasks', () => {
   }));
 
   const findTaskById = (id: string): Task | undefined => tasks.value.find((task) => task.id === id);
-  const isTaskLoading = (id: string): boolean => loadingTasks.value.has(id);
-
-  const setTaskLoading = (id: string, loading: boolean) => {
-    if (loading) {
-      loadingTasks.value.add(id);
-    } else {
-      loadingTasks.value.delete(id);
-    }
-  };
 
   const replaceTask = (updatedTask: Task) => {
     const index = tasks.value.findIndex((task) => task.id === updatedTask.id);
@@ -38,11 +29,11 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   };
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (options?: { limit?: number; offset?: number }) => {
     loading.value = true;
     error.value = null;
 
-    const { data, error: apiError } = await api.getAllTasks();
+    const { data, error: apiError } = await api.getTasks(options);
     if (apiError.value) {
       error.value = 'Échec du chargement des tâches';
       loading.value = false;
@@ -82,6 +73,8 @@ export const useTasksStore = defineStore('tasks', () => {
     if (data.value) {
       tasks.value.unshift(data.value);
     }
+
+    totalTasksStat.value += 1;
     creating.value = false;
     return data.value;
   };
@@ -102,18 +95,18 @@ export const useTasksStore = defineStore('tasks', () => {
   };
 
   const deleteTask = async (id: string) => {
-    setTaskLoading(id, true);
     error.value = null;
 
     const { data, error: apiError } = await api.deleteTask(id);
     if (apiError.value) {
       error.value = 'Échec de la suppression de la tâche';
-      setTaskLoading(id, false);
+
       return;
     }
 
     tasks.value = tasks.value.filter((task) => task.id !== id);
-    setTaskLoading(id, false);
+    totalTasksStat.value -= 1;
+
     return data.value;
   };
 
@@ -121,7 +114,6 @@ export const useTasksStore = defineStore('tasks', () => {
     const task = findTaskById(id);
     if (!task) return;
 
-    setTaskLoading(id, true);
     const completed = task.completed;
     task.completed = !task.completed;
 
@@ -129,14 +121,16 @@ export const useTasksStore = defineStore('tasks', () => {
     if (apiError.value) {
       task.completed = completed;
       error.value = 'Échec de la mise à jour de la tâche';
-      setTaskLoading(id, false);
+
       return;
     }
 
     if (data.value) {
       replaceTask(data.value);
     }
-    setTaskLoading(id, false);
+
+    completedTasksStat.value += task.completed ? 1 : -1;
+
     return data.value;
   };
 
@@ -146,7 +140,6 @@ export const useTasksStore = defineStore('tasks', () => {
 
   const clearTasks = () => {
     tasks.value = [];
-    loadingTasks.value.clear();
   };
 
   return {
@@ -154,8 +147,6 @@ export const useTasksStore = defineStore('tasks', () => {
     loading,
     error,
     creating,
-    completedTasks,
-    pendingTasks,
     tasksByPriority,
     fetchTasks,
     getTask,
@@ -164,7 +155,6 @@ export const useTasksStore = defineStore('tasks', () => {
     deleteTask,
     toggleTaskCompletion,
     findTaskById,
-    isTaskLoading,
     clearError,
     clearTasks,
   };

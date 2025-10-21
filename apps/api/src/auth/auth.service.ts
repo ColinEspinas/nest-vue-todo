@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PayloadUser } from './types/payload-user.type';
 import { JwtPayload } from './types/jwt-payload.type';
 import { SafeUser } from '../users/entities/safe-user.entity';
+import { EnrichedUser } from 'src/users/entities/enriched-user.entity';
 
 @Injectable()
 export class AuthService {
@@ -60,12 +61,16 @@ export class AuthService {
     }
   }
 
-  async getUser(user: PayloadUser): Promise<SafeUser> {
+  async getUser(user: PayloadUser): Promise<EnrichedUser> {
     const foundUser = await this.usersService.findByEmail(user.email);
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }
-    return new SafeUser(foundUser.id, foundUser.name, foundUser.email);
+    const enrichedUser = await this.usersService.enrichUser(foundUser);
+    if (!enrichedUser) {
+      throw new NotFoundException('Enriched user data not found');
+    }
+    return enrichedUser;
   }
 
   private hashPassword(password: string): Promise<string> {

@@ -1,4 +1,4 @@
-import type { NewUser, User } from '@/types/user';
+import type { EnrichedUser, NewUser, User } from '@/types/user';
 import { useApi } from './use-api';
 
 export const useAuthApi = () => {
@@ -17,7 +17,7 @@ export const useAuthApi = () => {
   };
 
   const getCurrentUser = async () => {
-    return useApi('/auth/me').json<User>();
+    return useApi('/auth/me').json<EnrichedUser>();
   };
 
   return {

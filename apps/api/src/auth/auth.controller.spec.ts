@@ -121,11 +121,18 @@ describe('AuthController', () => {
 
   describe('GET /auth/me', () => {
     it('should return current authenticated user information', async () => {
-      authService.getUser.mockResolvedValue(mockSafeUser);
+      const mockEnrichedUser = {
+        id: mockUserId,
+        name: mockName,
+        email: mockEmail,
+        totalTasks: 5,
+        completedTasks: 3,
+      };
+      authService.getUser.mockResolvedValue(mockEnrichedUser);
 
       const result = await authController.me(mockRequest);
 
-      expect(result).toEqual(mockSafeUser);
+      expect(result).toEqual(mockEnrichedUser);
       expect(authService.getUser).toHaveBeenCalledWith(mockRequest.user);
       expect(authService.getUser).toHaveBeenCalledTimes(1);
     });

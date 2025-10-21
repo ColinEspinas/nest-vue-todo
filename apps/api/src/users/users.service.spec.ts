@@ -30,6 +30,7 @@ describe('UsersService', () => {
           useValue: {
             findByEmail: jest.fn(),
             create: jest.fn(),
+            enrichUser: jest.fn(),
           },
         },
       ],
@@ -98,6 +99,33 @@ describe('UsersService', () => {
 
       await expect(usersService.create(mockNewUserDto)).rejects.toThrow(DuplicateUserError);
       expect(usersRepository.create).toHaveBeenCalledWith(mockNewUserDto);
+    });
+  });
+
+  describe('enrichUser', () => {
+    const safeUser = { id: mockUserId, name: mockName, email: mockEmail };
+    const enrichedUser = {
+      id: mockUserId,
+      name: mockName,
+      email: mockEmail,
+      totalTasks: 5,
+      completedTasks: 3,
+    };
+
+    it('should return enriched user data', async () => {
+      usersRepository.enrichUser.mockResolvedValue(enrichedUser);
+      const result = await usersService.enrichUser(safeUser);
+      expect(result).toEqual(enrichedUser);
+      expect(usersRepository.enrichUser).toHaveBeenCalledWith(safeUser);
+      expect(usersRepository.enrichUser).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return null if user not found', async () => {
+      usersRepository.enrichUser.mockResolvedValue(null);
+      const result = await usersService.enrichUser(safeUser);
+      expect(result).toBeNull();
+      expect(usersRepository.enrichUser).toHaveBeenCalledWith(safeUser);
+      expect(usersRepository.enrichUser).toHaveBeenCalledTimes(1);
     });
   });
 });

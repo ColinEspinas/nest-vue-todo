@@ -2,8 +2,12 @@ import type { Task, CreateTask, UpdateTask } from '@/types/task';
 import { useApi } from './use-api';
 
 export const useTasksApi = () => {
-  const getAllTasks = async () => {
-    return useApi('/tasks').json<Task[]>();
+  const getTasks = async (options?: { limit?: number; offset?: number }) => {
+    const params = new URLSearchParams();
+    if (options?.limit !== undefined) params.append('limit', String(options.limit));
+    if (options?.offset !== undefined) params.append('offset', String(options.offset));
+    const url = params.toString() ? `/tasks?${params}` : '/tasks';
+    return useApi(url).json<Task[]>();
   };
 
   const getTask = async (id: string) => {
@@ -31,7 +35,7 @@ export const useTasksApi = () => {
   };
 
   return {
-    getAllTasks,
+    getTasks,
     getTask,
     createTask,
     updateTask,

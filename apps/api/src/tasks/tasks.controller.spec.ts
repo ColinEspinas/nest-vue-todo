@@ -103,9 +103,7 @@ describe('TasksController', () => {
       const limit = 5;
       const offset = 10;
       tasksService.findAllByUserId.mockResolvedValue(mockTasks);
-      // Simulate query DTO
       const queryDto = { limit, offset };
-      // Pass both request and queryDto as arguments
       const result = await tasksController.findAll(mockRequest, queryDto);
       expect(result).toEqual(mockTasks);
       expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset);
@@ -116,9 +114,7 @@ describe('TasksController', () => {
   describe('GET /tasks/:id', () => {
     it('should return specific task for authenticated user', async () => {
       tasksService.findById.mockResolvedValue(mockTask);
-
       const result = await tasksController.findOne(mockTaskId, mockRequest);
-
       expect(result).toEqual(mockTask);
       expect(tasksService.findById).toHaveBeenCalledWith(mockTaskId, mockUserId);
       expect(tasksService.findById).toHaveBeenCalledTimes(1);

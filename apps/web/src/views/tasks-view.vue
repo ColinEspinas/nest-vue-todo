@@ -1,24 +1,35 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, computed } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useTimeoutFn } from '@vueuse/core';
+import { useAuthStore } from '@/stores/auth';
 import { useTasksStore } from '@/stores/tasks';
-import TaskStats from '@/components/app/tasks/task-stats.vue';
-import TaskList from '@/components/app/tasks/task-list.vue';
-import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vue';
-import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';
+import type { CreateTask } from '@/types/task';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/tasks/task-create-form.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
-import type { CreateTask } from '@/types/task';
-import { storeToRefs } from 'pinia';
-import { useTimeoutFn } from '@vueuse/core';
+import TaskList from '@/components/app/tasks/task-list.vue';
+import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';
+import TaskStats from '@/components/app/tasks/task-stats.vue';
+import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vue';
+import UiPagination from '@/components/ui/ui-pagination.vue';
+
+const authStore = useAuthStore();
+const {
+  totalTasksStat,
+  completedTasksStat,
+  pendingTasksStat,
+  loading: loadingUser,
+} = storeToRefs(authStore);
 
 const tasksStore = useTasksStore();
-const { tasks, loading, error, creating } = storeToRefs(tasksStore);
+const { tasks, loading: loadingTasks, error, creating } = storeToRefs(tasksStore);
 
-const delayedLoading = ref(false);
+const delayedCreationLoading = ref(false);
 const { start, stop } = useTimeoutFn(
   () => {
-    delayedLoading.value = true;
+    delayedCreationLoading.value = true;
   },
   400,
   { immediate: false },
@@ -29,8 +40,25 @@ watch(creating, (val) => {
     start();
   } else {
     stop();
-    delayedLoading.value = false;
+    delayedCreationLoading.value = false;
   }
+});
+
+const route = useRoute();
+const router = useRouter();
+
+const limit = ref(10);
+const page = ref(Number(route.query.page) || 1);
+
+const offset = computed(() => (page.value - 1) * limit.value);
+
+const fetchPage = async () => {
+  await tasksStore.fetchTasks({ limit: limit.value, offset: offset.value });
+};
+
+watch([page, limit], () => {
+  fetchPage();
+  router.replace({ query: { ...route.query, page: page.value } });
 });
 
 onMounted(async () => {
@@ -85,36 +113,50 @@ const handleSubmit = async (task: CreateTask) => {
     console.error('Failed to create task:', error);
   }
 };
+
+onMounted(fetchPage);
 </script>
 
 <template>
   <main>
     <section class="mb-4 bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
-      <TaskCreateForm @submit="handleSubmit" :loading="delayedLoading" />
+      <TaskCreateForm @submit="handleSubmit" :loading="delayedCreationLoading" />
     </section>
 
     <ErrorMessage v-if="error" :error="error" />
 
     <div class="bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
       <section class="mb-4">
-        <TaskStatsSkeleton v-if="loading" />
+        <TaskStatsSkeleton v-if="loadingUser" />
+
         <TaskStats
           v-else
-          :total="tasks.length"
-          :completed="tasksStore.completedTasks.length"
-          :pending="tasksStore.pendingTasks.length"
+          :total="totalTasksStat"
+          :completed="completedTasksStat"
+          :pending="pendingTasksStat"
         />
       </section>
 
+      <section class="flex justify-end mb-4">
+        <UiPagination v-model:page="page" :limit="limit" :total="totalTasksStat" class=" " />
+      </section>
+
       <section>
-        <TaskListSkeleton v-if="loading" />
+        <TaskListSkeleton v-if="loadingTasks" />
         <TaskList
           v-else
-          :tasks="tasksStore.tasks"
+          :tasks
           @toggle-complete="handleToggleComplete"
           @delete="handleDeleteTask"
         />
       </section>
+
+      <UiPagination
+        v-model:page="page"
+        :limit="limit"
+        :total="totalTasksStat"
+        class="mt-4 flex justify-center"
+      />
     </div>
 
     <TaskDeleteDialog

@@ -5,6 +5,8 @@ import { User } from '../entities/user.entity';
 import { NewUserDTO } from '../dtos/new-user.dto';
 import { Prisma } from 'generated/prisma';
 import { DuplicateUserError } from '../errors/duplicate-user.error';
+import { EnrichedUser } from '../entities/enriched-user.entity';
+import { SafeUser } from '../entities/safe-user.entity';
 
 @Injectable()
 export class PrismaUsersRepository extends UsersRepository {
@@ -28,5 +30,17 @@ export class PrismaUsersRepository extends UsersRepository {
       }
       throw e;
     }
+  }
+
+  async enrichUser(user: SafeUser): Promise<EnrichedUser | null> {
+    const totalTasks = await this.prisma.task.count({
+      where: { userId: user.id },
+    });
+
+    const completedTasks = await this.prisma.task.count({
+      where: { userId: user.id, completed: true },
+    });
+
+    return new EnrichedUser(user.id, user.name, user.email, totalTasks, completedTasks);
   }
 }
