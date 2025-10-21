@@ -11,10 +11,12 @@ export class PrismaTasksRepository extends TasksRepository {
     super();
   }
 
-  async findAllByUserId(userId: string): Promise<Task[]> {
+  async findAllByUserId(userId: string, limit?: number, offset?: number): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: offset,
     });
     return tasks as Task[];
   }

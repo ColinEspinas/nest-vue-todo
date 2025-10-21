@@ -8,8 +8,8 @@ import { UpdateTaskDto } from './dtos/update-task.dto';
 export class TasksService {
   constructor(private readonly tasksRepository: TasksRepository) {}
 
-  async findAllByUserId(userId: string): Promise<Task[]> {
-    return await this.tasksRepository.findAllByUserId(userId);
+  async findAllByUserId(userId: string, limit?: number, offset?: number): Promise<Task[]> {
+    return await this.tasksRepository.findAllByUserId(userId, limit, offset);
   }
 
   async findById(id: string, userId: string): Promise<Task> {

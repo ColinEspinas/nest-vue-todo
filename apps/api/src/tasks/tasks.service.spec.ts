@@ -76,20 +76,35 @@ describe('TasksService', () => {
       const mockTasks = [mockTask];
       tasksRepository.findAllByUserId.mockResolvedValue(mockTasks);
 
-      const result = await tasksService.findAllByUserId(mockUserId);
+      const result = await tasksService.findAllByUserId(mockUserId, 10, 0);
 
       expect(result).toEqual(mockTasks);
-      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
       expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });
 
     it('should return empty array when user has no tasks', async () => {
       tasksRepository.findAllByUserId.mockResolvedValue([]);
 
-      const result = await tasksService.findAllByUserId(mockUserId);
+      const result = await tasksService.findAllByUserId(mockUserId, 10, 0);
 
       expect(result).toEqual([]);
-      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+    });
+  });
+
+  describe('findAllByUserId with pagination', () => {
+    it('should pass limit and offset to repository', async () => {
+      const mockTasks = [mockTask];
+      const limit = 5;
+      const offset = 10;
+      tasksRepository.findAllByUserId.mockResolvedValue(mockTasks);
+
+      const result = await tasksService.findAllByUserId(mockUserId, limit, offset);
+
+      expect(result).toEqual(mockTasks);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -7,6 +7,7 @@ import { Task } from './entities/task.entity';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { PayloadUser } from '../auth/types/payload-user.type';
+import { FindTasksQueryDto } from './dtos/find-tasks-query.dto';
 
 describe('TasksController', () => {
   let tasksController: TasksController;
@@ -78,24 +79,37 @@ describe('TasksController', () => {
   });
 
   describe('GET /tasks', () => {
-    it('should return all tasks for authenticated user', async () => {
+    it('should return all tasks for authenticated user with default pagination', async () => {
       const mockTasks = [mockTask];
       tasksService.findAllByUserId.mockResolvedValue(mockTasks);
-
-      const result = await tasksController.findAll(mockRequest);
-
+      const defaultQueryDto = new FindTasksQueryDto();
+      const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual(mockTasks);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledTimes(1);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
     });
 
     it('should return empty array when user has no tasks', async () => {
       tasksService.findAllByUserId.mockResolvedValue([]);
-
-      const result = await tasksController.findAll(mockRequest);
-
+      const defaultQueryDto = new FindTasksQueryDto();
+      const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual([]);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+    });
+  });
+
+  describe('GET /tasks with pagination', () => {
+    it('should pass limit and offset to service', async () => {
+      const mockTasks = [mockTask];
+      const limit = 5;
+      const offset = 10;
+      tasksService.findAllByUserId.mockResolvedValue(mockTasks);
+      // Simulate query DTO
+      const queryDto = { limit, offset };
+      // Pass both request and queryDto as arguments
+      const result = await tasksController.findAll(mockRequest, queryDto);
+      expect(result).toEqual(mockTasks);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledTimes(1);
     });
   });
 

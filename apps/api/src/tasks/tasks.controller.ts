@@ -12,8 +12,10 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { TasksService } from './tasks.service';
+import { Query } from '@nestjs/common';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
+import { FindTasksQueryDto } from './dtos/find-tasks-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PayloadUser } from '../auth/types/payload-user.type';
 
@@ -23,8 +25,11 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  async findAll(@Req() request: Request & { user: PayloadUser }) {
-    return this.tasksService.findAllByUserId(request.user.id);
+  async findAll(
+    @Req() request: Request & { user: PayloadUser },
+    @Query(new ValidationPipe({ transform: true })) query: FindTasksQueryDto,
+  ) {
+    return this.tasksService.findAllByUserId(request.user.id, query.limit, query.offset);
   }
 
   @Get(':id')
