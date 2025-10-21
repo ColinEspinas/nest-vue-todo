@@ -25,10 +25,13 @@ const getCurrentPriority = () => {
 <template>
   <SelectRoot v-model="priority" modal>
     <SelectTrigger
-      class="flex items-center gap-2 text-sm py-[9px] px-3 rounded-lg bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 hover:ring-3 focus:ring-3 transition-all outline-none cursor-pointer"
+      class="flex items-center justify-between gap-2 text-sm py-[9px] px-3 rounded-lg bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 hover:ring-3 focus:ring-3 transition-all outline-none cursor-pointer"
+      aria-label="Sélectionner la priorité"
     >
-      <Icon icon="ph:flag-bold" :class="[getCurrentPriority().color]" size="18" />
-      <span>{{ getCurrentPriority().label }}</span>
+      <div class="flex items-center gap-2">
+        <Icon icon="ph:flag-bold" :class="[getCurrentPriority().color]" size="18" />
+        <span>{{ getCurrentPriority().label }}</span>
+      </div>
       <Icon
         icon="ph:caret-down-bold"
         class="w-4 h-4 text-base-content-300 transition-transform data-[state=open]:rotate-180"

@@ -16,11 +16,16 @@ const logoutHandler = () => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center border-2 border-base-300 p-2 rounded-2xl">
+  <header
+    class="flex justify-between items-center bg-base-200/50 border-2 border-base-300 p-2 rounded-2xl"
+  >
     <div class="flex gap-2 items-center">
-      <template v-if="isAuthenticated">
-        <Avatar :name="user?.email || 'User'" :size="36" :variant="'marble'" />
-        <p class="font-medium" v-if="user">{{ user.name }} ({{ user.email }})</p>
+      <template v-if="isAuthenticated && user">
+        <Avatar :name="user?.email || 'User'" :size="36" variant="marble" />
+        <div>
+          <p class="font-medium text-sm">{{ user.name }}</p>
+          <p class="font-medium text-xs">{{ user.email }}</p>
+        </div>
       </template>
       <template v-else>
         <RouterLink to="/" class="font-medium ml-1">Todo</RouterLink>
@@ -28,7 +33,12 @@ const logoutHandler = () => {
     </div>
     <div class="flex gap-2">
       <template v-if="isAuthenticated">
-        <UiButton @click="logoutHandler" variant="secondary" text="Se déconnecter" />
+        <UiButton
+          @click="logoutHandler"
+          variant="secondary"
+          before-icon="ph:sign-out-bold"
+          aria-label="Se déconnecter"
+        />
       </template>
       <template v-else>
         <UiButton text="Se connecter" to="/sign-in" variant="secondary" />

@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import UiButton from '@/components/ui/ui-button.vue';
 import PrioritySelect from '@/components/app/inputs/priority-select.vue';
 import DatePicker from '@/components/app/inputs/date-picker.vue';
+import { useFormValidation } from '@/composables/use-form-validation';
+import { createTaskSchema } from '@/schemas';
 import type { CreateTask } from '@/types/task';
 
 const title = ref('');
@@ -15,21 +17,24 @@ const emit = defineEmits<{
 }>();
 
 const isSubmitting = ref(false);
+const { getError, hasError, validate } = useFormValidation(createTaskSchema);
 
 const handleSubmit = async () => {
-  if (!title.value.trim()) {
+  const formData = {
+    title: title.value.trim(),
+    description: description.value.trim(),
+    priority: priority.value,
+    deadline: deadline.value || undefined,
+  };
+
+  if (!validate(formData)) {
     return;
   }
 
   isSubmitting.value = true;
 
   try {
-    emit('submit', {
-      title: title.value.trim(),
-      description: description.value.trim(),
-      priority: priority.value,
-      deadline: deadline.value || undefined,
-    });
+    emit('submit', formData);
 
     title.value = '';
     description.value = '';
@@ -60,7 +65,10 @@ const handleSubmit = async () => {
         autocomplete="off"
         class="py-2 px-3 outline-none text-sm w-full"
       />
-      <div class="text-xs text-base-content-300 px-3 pb-3">{{ title.length }}/50 caractères</div>
+      <div class="flex justify-between items-center px-3 pb-3">
+        <span class="text-xs text-base-content-300">{{ title.length }}/50 caractères</span>
+        <span v-if="hasError('title')" class="text-xs text-error">{{ getError('title') }}</span>
+      </div>
     </div>
 
     <div class="flex flex-col">
@@ -76,8 +84,11 @@ const handleSubmit = async () => {
         autocomplete="off"
         class="py-2 px-3 outline-none resize-none h-24 text-sm"
       ></textarea>
-      <div class="text-xs text-base-content-300 px-3 pb-2">
-        {{ description.length }}/256 caractères
+      <div class="flex justify-between items-center px-3 pb-2">
+        <span class="text-xs text-base-content-300"> {{ description.length }}/256 caractères </span>
+        <span v-if="hasError('description')" class="text-xs text-error">
+          {{ getError('description') }}
+        </span>
       </div>
     </div>
     <div
@@ -91,7 +102,7 @@ const handleSubmit = async () => {
         text="Ajouter aux tâches"
         variant="accent"
         type="submit"
-        :disabled="isSubmitting || !title.trim()"
+        :disabled="isSubmitting"
         after-icon="ph:arrow-bend-right-down-bold"
         class="w-full sm:w-auto"
       />

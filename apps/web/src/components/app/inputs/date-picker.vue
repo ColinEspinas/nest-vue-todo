@@ -117,13 +117,13 @@ const minDate = computed(() => {
       :value="nativeDateValue"
       :min="minDate"
       :placeholder="props.placeholder"
-      class="text-sm py-2 px-3 rounded-lg bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 hover:ring-3 focus:ring-3 transition-all outline-none cursor-pointer font-medium"
+      class="w-full text-sm py-2 px-3 rounded-lg bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 hover:ring-3 focus:ring-3 transition-all outline-none cursor-pointer font-medium"
       @change="handleNativeDateChange"
     />
   </div>
   <PopoverRoot v-else v-model:open="isOpen" modal>
     <PopoverTrigger asChild>
-      <UiButton variant="secondary" :text="buttonText" before-icon="ph:calendar" />
+      <UiButton variant="secondary" :text="buttonText" before-icon="ph:clock-bold" />
     </PopoverTrigger>
 
     <PopoverContent

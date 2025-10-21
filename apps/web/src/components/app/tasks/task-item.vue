@@ -3,6 +3,7 @@ import type { Task } from '@/types/task';
 import UiCheckbox from '@/components/ui/ui-checkbox.vue';
 import PriorityTag from '@/components/app/tags/priority-tag.vue';
 import DeadlineTag from '@/components/app/tags/deadline-tag.vue';
+import CreatedAtTag from '@/components/app/tags/created-at-tag.vue';
 import UiButton from '@/components/ui/ui-button.vue';
 
 defineProps<{
@@ -16,20 +17,20 @@ defineEmits<{
 </script>
 
 <template>
-  <article class="flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-4 bg-base-100">
+  <article class="group flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-4 bg-base-100">
     <header class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <UiCheckbox :checked="task.completed" @change="$emit('toggleComplete', task.id)" />
         <h3
           :class="[
-            'font-medium',
+            'font-semibold',
             task.completed ? 'line-through text-base-content-300' : 'text-base-content-100',
           ]"
         >
           {{ task.title }}
         </h3>
       </div>
-      <div>
+      <div class="opacity-0 group-hover:opacity-100 transition-opacity">
         <UiButton
           variant="ghost"
           size="sm"
@@ -46,6 +47,7 @@ defineEmits<{
       {{ task.description }}
     </p>
     <footer class="flex items-center gap-2 text-xs text-base-content-300">
+      <CreatedAtTag :created-at="task.createdAt" />
       <DeadlineTag v-if="task.deadline" :deadline="task.deadline" />
       <PriorityTag :priority="task.priority" />
     </footer>

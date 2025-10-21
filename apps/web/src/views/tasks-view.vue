@@ -3,12 +3,15 @@ import { onMounted } from 'vue';
 import { useTasksStore } from '@/stores/tasks';
 import TaskStats from '@/components/app/tasks/task-stats.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';
-import LoadingSpinner from '@/components/app/loading-spinner.vue';
+import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vue';
+import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/tasks/task-create-form.vue';
 import type { CreateTask } from '@/types/task';
+import { storeToRefs } from 'pinia';
 
 const tasksStore = useTasksStore();
+const { tasks, loading, error } = storeToRefs(tasksStore);
 
 onMounted(async () => {
   try {
@@ -46,27 +49,37 @@ const handleSubmit = async (task: CreateTask) => {
 </script>
 
 <template>
-  <main
-    class="bg-base-200 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
-  >
-    <TaskCreateForm class="mb-4" @submit="handleSubmit" />
+  <main>
+    <section
+      class="mb-4 bg-base-200/50 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
+    >
+      <TaskCreateForm @submit="handleSubmit" />
+    </section>
 
-    <LoadingSpinner :loading="tasksStore.loading" />
-    <ErrorMessage v-if="tasksStore.error" :error="tasksStore.error" />
+    <ErrorMessage v-if="error" :error="error" />
 
-    <div v-if="!tasksStore.loading && !tasksStore.error">
-      <TaskStats
-        class="mb-4"
-        :total="tasksStore.tasks.length"
-        :completed="tasksStore.completedTasks.length"
-        :pending="tasksStore.pendingTasks.length"
-      />
+    <div
+      class="bg-base-200/50 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
+    >
+      <section class="mb-4">
+        <TaskStatsSkeleton v-if="loading" />
+        <TaskStats
+          v-else
+          :total="tasks.length"
+          :completed="tasksStore.completedTasks.length"
+          :pending="tasksStore.pendingTasks.length"
+        />
+      </section>
 
-      <TaskList
-        :tasks="tasksStore.tasks"
-        @toggle-complete="handleToggleComplete"
-        @delete="handleDeleteTask"
-      />
+      <section>
+        <TaskListSkeleton v-if="loading" />
+        <TaskList
+          v-else
+          :tasks="tasksStore.tasks"
+          @toggle-complete="handleToggleComplete"
+          @delete="handleDeleteTask"
+        />
+      </section>
     </div>
   </main>
 </template>
