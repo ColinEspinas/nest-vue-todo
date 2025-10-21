@@ -143,7 +143,7 @@ onMounted(fetchPage);
         />
       </section>
 
-      <section class="flex justify-end mb-4">
+      <section v-if="totalTasksStat > 0" class="flex justify-end mb-4">
         <UiPagination v-model:page="page" :limit="limit" :total="totalTasksStat" class=" " />
       </section>
 
@@ -158,6 +158,7 @@ onMounted(fetchPage);
       </section>
 
       <UiPagination
+        v-if="totalTasksStat > 0"
         v-model:page="page"
         :limit="limit"
         :total="totalTasksStat"
