@@ -8,6 +8,8 @@ import UiButton from '@/components/ui/ui-button.vue';
 
 defineProps<{
   task: Task;
+  hideActions?: boolean;
+  disabledCheckbox?: boolean;
 }>();
 
 defineEmits<{
@@ -20,7 +22,11 @@ defineEmits<{
   <article class="group flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-4 bg-base-100">
     <header class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <UiCheckbox :checked="task.completed" @change="$emit('toggleComplete', task.id)" />
+        <UiCheckbox
+          :checked="task.completed"
+          :disabled="disabledCheckbox"
+          @change="$emit('toggleComplete', task.id)"
+        />
         <h3
           :class="[
             'font-semibold',
@@ -30,7 +36,7 @@ defineEmits<{
           {{ task.title }}
         </h3>
       </div>
-      <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+      <div v-if="!hideActions" class="md:opacity-0 group-hover:opacity-100 transition-opacity">
         <UiButton
           variant="ghost"
           size="sm"
@@ -46,7 +52,7 @@ defineEmits<{
     >
       {{ task.description }}
     </p>
-    <footer class="flex items-center gap-2 text-xs text-base-content-300">
+    <footer class="flex items-center flex-wrap gap-2 text-xs text-base-content-300">
       <CreatedAtTag :created-at="task.createdAt" />
       <DeadlineTag v-if="task.deadline" :deadline="task.deadline" />
       <PriorityTag :priority="task.priority" />

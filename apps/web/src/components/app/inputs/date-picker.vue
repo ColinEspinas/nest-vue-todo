@@ -127,7 +127,7 @@ const minDate = computed(() => {
     </PopoverTrigger>
 
     <PopoverContent
-      class="bg-white border-2 border-base-300 rounded-2xl shadow-lg p-2 z-50"
+      class="bg-base-100 border-2 border-base-300 rounded-2xl shadow-lg p-2 z-50"
       :side-offset="4"
       @interact-outside="closePopover"
       @focus-outside="closePopover"

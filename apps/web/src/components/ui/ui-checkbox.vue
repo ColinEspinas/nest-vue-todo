@@ -22,7 +22,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <label class="inline-flex items-center cursor-pointer">
+  <label class="inline-flex items-center cursor-pointer group">
     <div class="relative flex-shrink-0">
       <input
         :id
@@ -30,25 +30,20 @@ const emits = defineEmits<{
         :checked
         :disabled
         :aria-label="ariaLabel"
-        class="sr-only"
+        class="sr-only peer"
         @change="emits('change', !checked)"
       />
       <div
-        :class="[
-          'w-5 h-5 border-2 rounded transition-all duration-300 ease-out',
-          'flex items-center justify-center flex-shrink-0',
-          'ring-0 ring-base-content-100/20 hover:ring-3',
-          checked
-            ? 'bg-base-content-100 border-base-content-100 scale-100'
-            : 'bg-base-100 border-base-300 hover:border-base-content-200 hover:bg-base-200 scale-100',
-          disabled && 'opacity-50 cursor-not-allowed',
-        ]"
+        class="w-5 h-5 border-2 rounded transition-all duration-300 ease-out flex items-center justify-center flex-shrink-0 ring-0 ring-base-content-100/20 bg-base-100 border-base-300 scale-100 peer-checked:bg-base-content-100 peer-checked:border-base-content-100 peer-checked:scale-100 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed peer-hover:ring-3 peer-hover:border-base-content-200 peer-disabled:hover:ring-0 peer-disabled:hover:border-base-300 peer-disabled:hover:bg-base-100 peer-checked:peer-disabled:hover:bg-base-content-100 peer-checked:peer-disabled:hover:border-base-content-100"
+        :class="[!checked && 'peer-hover:bg-base-200']"
       >
         <Icon
           icon="ph:check-bold"
           :class="[
-            'w-3 h-3 transition-all ease-out text-white',
-            checked ? 'opacity-100 scale-100 duration-200' : 'opacity-0 scale-50 duration-150',
+            'w-3 h-3 transition-all ease-out',
+            checked
+              ? 'opacity-100 scale-100 duration-200 text-white'
+              : 'opacity-0 scale-50 duration-150 text-base-content-100',
           ]"
           :style="{
             transitionTimingFunction: checked

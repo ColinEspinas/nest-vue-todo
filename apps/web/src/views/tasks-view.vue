@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { useTasksStore } from '@/stores/tasks';
 import TaskStats from '@/components/app/tasks/task-stats.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';
@@ -51,28 +51,32 @@ const handleToggleComplete = async (taskId: string) => {
 
 const handleDeleteTask = (taskId: string) => {
   showDeleteDialog.value = true;
-  taskToDelete.value = taskId;
+  taskToDeleteId.value = taskId;
 };
 
 const confirmDeleteTask = async () => {
-  if (taskToDelete.value) {
+  if (taskToDeleteId.value) {
     try {
-      await tasksStore.deleteTask(taskToDelete.value);
+      await tasksStore.deleteTask(taskToDeleteId.value);
     } catch (error) {
       console.error('Failed to delete task:', error);
     }
   }
   showDeleteDialog.value = false;
-  taskToDelete.value = null;
+  taskToDeleteId.value = null;
 };
 
 const closeDeleteDialog = () => {
   showDeleteDialog.value = false;
-  taskToDelete.value = null;
+  taskToDeleteId.value = null;
 };
 
 const showDeleteDialog = ref(false);
-const taskToDelete = ref<string | null>(null);
+const taskToDeleteId = ref<string | null>(null);
+
+const taskToDelete = computed(() =>
+  taskToDeleteId.value ? tasksStore.findTaskById(taskToDeleteId.value) : undefined,
+);
 
 const handleSubmit = async (task: CreateTask) => {
   try {
@@ -119,6 +123,7 @@ const handleSubmit = async (task: CreateTask) => {
 
     <TaskDeleteDialog
       :open="showDeleteDialog"
+      :task="taskToDelete"
       @close="closeDeleteDialog"
       @confirm="confirmDeleteTask"
     />
