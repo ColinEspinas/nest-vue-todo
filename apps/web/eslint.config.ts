@@ -2,7 +2,6 @@ import { globalIgnores } from 'eslint/config';
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import pluginVue from 'eslint-plugin-vue';
-import pluginVitest from '@vitest/eslint-plugin';
 
 export default defineConfigWithVueTs(
   {
@@ -15,10 +14,6 @@ export default defineConfigWithVueTs(
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
   eslintPluginPrettierRecommended,
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
   {
     languageOptions: {
       parserOptions: {
