@@ -40,81 +40,80 @@ export const useTasksStore = defineStore('tasks', () => {
   const fetchTasks = async () => {
     loading.value = true;
     error.value = null;
-    try {
-      const { data, error: apiError } = await api.getAllTasks();
-      if (apiError.value) throw new Error(apiError.value.message || 'Failed to fetch tasks');
-      tasks.value = data.value || [];
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch tasks';
-      throw err;
-    } finally {
+
+    const { data, error: apiError } = await api.getAllTasks();
+    if (apiError.value) {
+      error.value = 'Échec du chargement des tâches';
       loading.value = false;
+      return;
     }
+
+    tasks.value = data.value || [];
+    loading.value = false;
   };
 
   const getTask = async (id: string) => {
     loading.value = true;
     error.value = null;
-    try {
-      const { data, error: apiError } = await api.getTask(id);
-      if (apiError.value) throw new Error(apiError.value.message || 'Task not found');
-      return data.value;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch task';
-      throw err;
-    } finally {
+
+    const { data, error: apiError } = await api.getTask(id);
+    if (apiError.value) {
+      error.value = 'Tâche introuvable';
       loading.value = false;
+      return;
     }
+
+    loading.value = false;
+    return data.value;
   };
 
   const createTask = async (task: CreateTask) => {
     loading.value = true;
     error.value = null;
-    try {
-      const { data, error: apiError } = await api.createTask(task);
-      if (apiError.value) throw new Error(apiError.value.message || 'Failed to create task');
-      if (data.value) {
-        tasks.value.unshift(data.value);
-        return data.value;
-      }
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to create task';
-      throw err;
-    } finally {
+
+    const { data, error: apiError } = await api.createTask(task);
+    if (apiError.value) {
+      error.value = 'Échec de la création de la tâche';
       loading.value = false;
+      return;
     }
+
+    if (data.value) {
+      tasks.value.unshift(data.value);
+    }
+    loading.value = false;
+    return data.value;
   };
 
   const updateTask = async (id: string, task: UpdateTask) => {
     error.value = null;
-    try {
-      const { data, error: apiError } = await api.updateTask(id, task);
-      if (apiError.value) throw new Error(apiError.value.message || 'Failed to update task');
-      if (data.value) {
-        replaceTask(data.value);
-        return data.value;
-      }
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to update task';
-      throw err;
+
+    const { data, error: apiError } = await api.updateTask(id, task);
+    if (apiError.value) {
+      error.value = 'Échec de la mise à jour de la tâche';
+      return;
     }
+
+    if (data.value) {
+      replaceTask(data.value);
+    }
+    return data.value;
   };
 
   const deleteTask = async (id: string) => {
     setTaskLoading(id, true);
     error.value = null;
 
-    try {
-      const { data, error: apiError } = await api.deleteTask(id);
-      if (apiError.value) throw new Error(apiError.value.message || 'Failed to delete task');
-      tasks.value = tasks.value.filter((task) => task.id !== id);
-      return data.value;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to delete task';
-      throw err;
-    } finally {
+    const { data, error: apiError } = await api.deleteTask(id);
+    if (apiError.value) {
+      error.value = 'Échec de la suppression de la tâche';
       setTaskLoading(id, false);
+      return;
     }
+
+    tasks.value = tasks.value.filter((task) => task.id !== id);
+    setTaskLoading(id, false);
+    return data.value;
   };
 
   const toggleTaskCompletion = async (id: string) => {
@@ -122,26 +121,22 @@ export const useTasksStore = defineStore('tasks', () => {
     if (!task) return;
 
     setTaskLoading(id, true);
-
-    const originalCompleted = task.completed;
+    const completed = task.completed;
     task.completed = !task.completed;
 
-    try {
-      const { data, error: apiError } = await api.updateTask(id, { completed: task.completed });
-      if (apiError.value) {
-        task.completed = originalCompleted;
-        throw new Error(apiError.value.message || 'Failed to update task');
-      }
-      if (data.value) {
-        replaceTask(data.value);
-      }
-      return data.value;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to update task';
-      throw err;
-    } finally {
+    const { data, error: apiError } = await api.updateTask(id, { completed: task.completed });
+    if (apiError.value) {
+      task.completed = completed;
+      error.value = 'Échec de la mise à jour de la tâche';
       setTaskLoading(id, false);
+      return;
     }
+
+    if (data.value) {
+      replaceTask(data.value);
+    }
+    setTaskLoading(id, false);
+    return data.value;
   };
 
   const clearError = () => {

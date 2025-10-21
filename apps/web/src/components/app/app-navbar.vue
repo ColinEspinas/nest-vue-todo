@@ -16,7 +16,7 @@ const logoutHandler = () => {
 </script>
 
 <template>
-  <header class="flex justify-between items-center border-1 border-base-300 p-2 rounded-2xl">
+  <header class="flex justify-between items-center border-2 border-base-300 p-2 rounded-2xl">
     <div class="flex gap-2 items-center">
       <template v-if="isAuthenticated">
         <Avatar :name="user?.email || 'User'" :size="36" :variant="'marble'" />

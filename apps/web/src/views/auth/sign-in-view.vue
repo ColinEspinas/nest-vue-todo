@@ -17,7 +17,7 @@ const login = async () => {
 </script>
 
 <template>
-  <article class="flex flex-col gap-2 rounded-2xl border-1 border-base-300 p-5">
+  <article class="flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-5">
     <h2 class="font-bold text-2xl">Se connecter</h2>
 
     <p>Veuillez entrer vos identifiants pour vous connecter.</p>

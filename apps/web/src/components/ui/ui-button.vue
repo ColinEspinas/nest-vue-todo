@@ -36,13 +36,13 @@ const emits = defineEmits<{
 
 const variantClasses = {
   primary:
-    'bg-base-content-100 text-base-100 ring-0 border-1 border-transparent ring-base-content-100/20 hover:ring-3 transition-all',
+    'bg-base-content-100 text-base-100 ring-0 border-2 border-transparent ring-base-content-100/20 hover:ring-3 transition-all',
   secondary:
-    'bg-base-100 text-base-content-100 border-1 border-base-content-100/20 ring-0 ring-base-content-100/10 not-disabled:hover:ring-3 transition-all disabled:bg-base-200 disabled:text-base-content-300 disabled:cursor-default',
+    'bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 not-disabled:hover:ring-3 transition-all disabled:bg-base-200 disabled:text-base-content-300 disabled:cursor-default',
   accent:
-    'bg-accent text-accent-content ring-0 ring-accent/25 hover:ring-3 border-1 border-accent transition-all bg-radial-(--gradient-position) from-accent-content/20 to-transparent to-50%',
+    'bg-accent text-accent-content ring-0 ring-accent/25 hover:ring-3 border-2 border-accent transition-all bg-radial-(--gradient-position) from-accent-content/20 to-transparent to-50%',
   ghost:
-    'bg-transparent text-base-content-100 ring-0 ring-base-content-100/10 hover:ring-3 border-1 border-base-content-100/20 transition-all disabled:text-base-content-300 disabled:cursor-default',
+    'bg-transparent text-base-content-100 ring-0 ring-base-content-100/10 hover:ring-3 border-2 border-base-content-100/20 transition-all disabled:text-base-content-300 disabled:cursor-default',
   text: 'bg-transparent text-base-content-100 ring-0 ring-base-content-100/10 hover:ring-3 border-0 transition-all disabled:text-base-content-300 disabled:cursor-default',
 };
 
@@ -58,9 +58,9 @@ const shapeClasses = {
 };
 
 const sizeClasses = {
-  sm: 'text-sm py-1 px-2',
-  md: 'text-base py-2 px-3',
-  lg: 'text-lg py-3 px-4',
+  sm: 'text-xs py-1.5 px-2.5',
+  md: 'text-sm py-2 px-3',
+  lg: 'text-base py-3 px-6',
 };
 
 const buttonRef = useTemplateRef<HTMLDivElement>('button');

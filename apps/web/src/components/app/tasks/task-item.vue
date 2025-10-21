@@ -1,0 +1,53 @@
+<script setup lang="ts">
+import type { Task } from '@/types/task';
+import UiCheckbox from '@/components/ui/ui-checkbox.vue';
+import PriorityTag from '@/components/app/tags/priority-tag.vue';
+import DeadlineTag from '@/components/app/tags/deadline-tag.vue';
+import UiButton from '@/components/ui/ui-button.vue';
+
+defineProps<{
+  task: Task;
+}>();
+
+defineEmits<{
+  toggleComplete: [id: string];
+  delete: [id: string];
+}>();
+</script>
+
+<template>
+  <article class="flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-4 bg-base-100">
+    <header class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <UiCheckbox :checked="task.completed" @change="$emit('toggleComplete', task.id)" />
+        <h3
+          :class="[
+            'font-medium',
+            task.completed ? 'line-through text-base-content-300' : 'text-base-content-100',
+          ]"
+        >
+          {{ task.title }}
+        </h3>
+      </div>
+      <div>
+        <UiButton
+          variant="ghost"
+          size="sm"
+          shape="rounded"
+          before-icon="ph:trash"
+          aria-label="Supprimer la tâche"
+          @click="$emit('delete', task.id)"
+        />
+      </div>
+    </header>
+    <p
+      :class="['text-sm mb-3', task.completed ? 'text-base-content-300' : 'text-base-content-200']"
+    >
+      {{ task.description }}
+    </p>
+    <footer class="flex items-center gap-2 text-xs text-base-content-300">
+      <DeadlineTag v-if="task.deadline" :deadline="task.deadline" />
+      <PriorityTag :priority="task.priority" />
+    </footer>
+  </article>
+</template>

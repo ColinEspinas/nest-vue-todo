@@ -1,25 +1,26 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 defineProps<{
   label: string;
-  variant?: 'high' | 'medium' | 'low' | 'default';
+  icon?: string;
+  iconColor?: string;
+  textColor?: string;
+  bgColor?: string;
+  borderColor?: string;
 }>();
-
-const getVariantClasses = (variant: string = 'default') => {
-  switch (variant) {
-    case 'high':
-      return 'text-error bg-base-100 border-base-300';
-    case 'medium':
-      return 'text-accent bg-base-100 border-base-300';
-    case 'low':
-      return 'text-success bg-base-100 border-base-300';
-    default:
-      return 'text-base-content-200 bg-base-100 border-base-300';
-  }
-};
 </script>
 
 <template>
-  <span :class="['px-2 py-1 text-xs rounded-full font-medium border', getVariantClasses(variant)]">
+  <span
+    :class="[
+      'flex gap-1 items-center px-2 py-1 text-xs rounded-full font-medium border',
+      textColor || 'text-base-content-200',
+      bgColor || 'bg-base-100',
+      borderColor || 'border-base-300',
+    ]"
+  >
+    <Icon v-if="icon" :icon="icon" :class="['w-3 h-3', iconColor || 'text-base-content-200']" />
     {{ label }}
   </span>
 </template>
