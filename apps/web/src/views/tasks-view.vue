@@ -89,17 +89,13 @@ const handleSubmit = async (task: CreateTask) => {
 
 <template>
   <main>
-    <section
-      class="mb-4 bg-base-200/50 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
-    >
+    <section class="mb-4 bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
       <TaskCreateForm @submit="handleSubmit" :loading="delayedLoading" />
     </section>
 
     <ErrorMessage v-if="error" :error="error" />
 
-    <div
-      class="bg-base-200/50 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border-2 border-base-content-100/10"
-    >
+    <div class="bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
       <section class="mb-4">
         <TaskStatsSkeleton v-if="loading" />
         <TaskStats

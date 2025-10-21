@@ -23,42 +23,48 @@ const register = async () => {
 </script>
 
 <template>
-  <article class="flex flex-col gap-2 rounded-2xl border-2 border-base-300 p-5">
-    <h2 class="font-bold text-2xl">S'inscrire</h2>
+  <article
+    class="flex flex-col mb-4 bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10"
+  >
+    <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-4">
+      <div class="flex flex-col gap-1">
+        <h2 class="font-bold text-2xl">S'inscrire</h2>
+        <p>Veuillez entrer vos identifiants pour vous inscrire.</p>
+      </div>
 
-    <p>Veuillez entrer vos identifiants pour vous inscrire.</p>
-    <form class="flex flex-col gap-2" @submit.prevent="register">
-      <input
-        v-model="name"
-        type="text"
-        placeholder="Entrez votre nom..."
-        class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
-      />
-      <input
-        v-model="email"
-        type="email"
-        placeholder="Entrez votre adresse e-mail..."
-        class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
-      />
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Entrez votre mot de passe..."
-        class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
-      />
-      <UiButton
-        after-icon="ph:arrow-bend-up-right-bold"
-        text="S'inscrire"
-        variant="accent"
-        class="min-w-max"
-        align="center"
-        type="submit"
-      />
-    </form>
+      <form class="flex flex-col gap-2" @submit.prevent="register">
+        <input
+          v-model="name"
+          type="text"
+          placeholder="Entrez votre nom..."
+          class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+        />
+        <input
+          v-model="email"
+          type="email"
+          placeholder="Entrez votre adresse e-mail..."
+          class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+        />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Entrez votre mot de passe..."
+          class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+        />
+        <UiButton
+          after-icon="ph:arrow-bend-up-right-bold"
+          text="S'inscrire"
+          variant="accent"
+          class="min-w-max"
+          align="center"
+          type="submit"
+        />
+      </form>
 
-    <p>
-      <span>Vous avez déjà un compte ?&nbsp;</span>
-      <RouterLink to="/sign-in" class="text-accent">Se connecter</RouterLink>
-    </p>
+      <p class="text-sm">
+        <span>Vous avez déjà un compte ?&nbsp;</span>
+        <RouterLink to="/sign-in" class="text-accent">Se connecter</RouterLink>
+      </p>
+    </div>
   </article>
 </template>
