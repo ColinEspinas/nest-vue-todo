@@ -49,19 +49,25 @@ const router = useRouter();
 
 const limit = ref(10);
 const page = ref(Number(route.query.page) || 1);
-
 const offset = computed(() => (page.value - 1) * limit.value);
+const maxPage = computed(() =>
+  Math.max(1, Math.ceil((Number(totalTasksStat.value) || 0) / limit.value)),
+);
 
 const fetchPage = async () => {
   await tasksStore.fetchTasks({ limit: limit.value, offset: offset.value });
 };
 
-watch([page, limit], () => {
+watch([page, limit, totalTasksStat], () => {
+  if (page.value < 1) page.value = 1;
+  else if (page.value > maxPage.value) page.value = maxPage.value;
   fetchPage();
   router.replace({ query: { ...route.query, page: page.value } });
 });
 
 onMounted(async () => {
+  if (page.value < 1) page.value = 1;
+  else if (page.value > maxPage.value) page.value = maxPage.value;
   try {
     await tasksStore.fetchTasks();
   } catch (error) {
@@ -142,7 +148,7 @@ onMounted(fetchPage);
       </section>
 
       <section>
-        <TaskListSkeleton v-if="loadingTasks" />
+        <TaskListSkeleton v-if="loadingTasks && tasks.length === 0" />
         <TaskList
           v-else
           :tasks
