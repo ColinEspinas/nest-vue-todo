@@ -68,7 +68,7 @@ const buttonRef = useTemplateRef<HTMLDivElement>('button');
 const { elementX, elementY, elementHeight, elementWidth } = useMouseInElement(buttonRef);
 
 const gradientPosition = computed(() => {
-  if (!['accent', 'glass'].includes(props.variant)) return '';
+  if (!['accent'].includes(props.variant)) return '';
   const padding = 100;
   if (
     elementX.value > -padding &&
@@ -92,13 +92,30 @@ const gradientPosition = computed(() => {
     :style="{ '--gradient-position': gradientPosition }"
     :aria-label="ariaLabel"
   >
-    <!-- Button Content Block -->
-    <div v-if="props.loading" class="absolute inset-0 w-full h-full flex items-center justify-center" aria-hidden>
-      <Icon icon="ph:circle-notch-bold" class="animate-spin" :size="props.size === 'sm' ? 18 : props.size === 'md' ? 22 : 26" />
+    <div
+      v-if="loading"
+      class="absolute inset-0 w-full h-full flex items-center justify-center"
+      aria-hidden
+    >
+      <Icon
+        icon="ph:circle-notch-bold"
+        class="animate-spin"
+        :size="size === 'sm' ? 18 : size === 'md' ? 22 : 26"
+      />
     </div>
-    <Icon v-if="props.beforeIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.beforeIcon" />
-    <span v-if="props.text" :class="{ 'opacity-0': props.loading }">{{ props.text }}</span>
-    <Icon v-if="props.afterIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.afterIcon" />
+    <Icon
+      v-if="beforeIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="beforeIcon"
+    />
+    <span v-if="text" :class="{ 'opacity-0': loading }">{{ text }}</span>
+    <Icon
+      v-if="afterIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="afterIcon"
+    />
   </RouterLink>
   <a
     v-else-if="to && external"
@@ -111,13 +128,30 @@ const gradientPosition = computed(() => {
     :class="[variantClasses[variant], alignClasses[align], shapeClasses[shape], sizeClasses[size]]"
     :aria-label="ariaLabel"
   >
-    <!-- Button Content Block -->
-    <div v-if="props.loading" class="absolute inset-0 w-full h-full flex items-center justify-center" aria-hidden>
-      <Icon icon="ph:circle-notch-bold" class="animate-spin" :size="props.size === 'sm' ? 18 : props.size === 'md' ? 22 : 26" />
+    <div
+      v-if="loading"
+      class="absolute inset-0 w-full h-full flex items-center justify-center"
+      aria-hidden
+    >
+      <Icon
+        icon="ph:circle-notch-bold"
+        class="animate-spin"
+        :size="size === 'sm' ? 18 : size === 'md' ? 22 : 26"
+      />
     </div>
-    <Icon v-if="props.beforeIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.beforeIcon" />
-    <span v-if="props.text" :class="{ 'opacity-0': props.loading }">{{ props.text }}</span>
-    <Icon v-if="props.afterIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.afterIcon" />
+    <Icon
+      v-if="beforeIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="beforeIcon"
+    />
+    <span v-if="text" :class="{ 'opacity-0': loading }">{{ text }}</span>
+    <Icon
+      v-if="afterIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="afterIcon"
+    />
   </a>
   <button
     v-else
@@ -130,12 +164,29 @@ const gradientPosition = computed(() => {
     :aria-label="ariaLabel"
     @click="emits('click')"
   >
-    <!-- Button Content Block -->
-    <div v-if="props.loading" class="absolute inset-0 w-full h-full flex items-center justify-center" aria-hidden>
-      <Icon icon="ph:circle-notch-bold" class="animate-spin" :size="props.size === 'sm' ? 18 : props.size === 'md' ? 22 : 26" />
+    <div
+      v-if="loading"
+      class="absolute inset-0 w-full h-full flex items-center justify-center"
+      aria-hidden
+    >
+      <Icon
+        icon="ph:circle-notch-bold"
+        class="animate-spin"
+        :size="size === 'sm' ? 18 : size === 'md' ? 22 : 26"
+      />
     </div>
-    <Icon v-if="props.beforeIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.beforeIcon" />
-    <span v-if="props.text" :class="{ 'opacity-0': props.loading }">{{ props.text }}</span>
-    <Icon v-if="props.afterIcon" :class="['my-1', { 'opacity-0': props.loading }]" :size="props.size === 'sm' ? 16 : props.size === 'md' ? 18 : 20" :icon="props.afterIcon" />
+    <Icon
+      v-if="beforeIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="beforeIcon"
+    />
+    <span v-if="text" :class="{ 'opacity-0': loading }">{{ text }}</span>
+    <Icon
+      v-if="afterIcon"
+      :class="['my-1', { 'opacity-0': loading }]"
+      :size="size === 'sm' ? 16 : size === 'md' ? 18 : 20"
+      :icon="afterIcon"
+    />
   </button>
 </template>
