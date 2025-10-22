@@ -146,8 +146,11 @@ const handleSubmit = async (task: CreateTask) => {
         />
       </section>
 
-      <section v-if="totalTasksStat > 0" class="flex justify-between mb-4">
-        <OrderSelect v-model="order" class="mr-4" @update:model-value="fetchPage" />
+      <section
+        v-if="totalTasksStat > 0"
+        class="flex flex-col sm:flex-row gap-4 justify-between mb-4"
+      >
+        <OrderSelect v-model="order" @update:model-value="fetchPage" />
         <UiPagination v-model:page="page" :limit="limit" :total="totalTasksStat" class=" " />
       </section>
 
