@@ -21,7 +21,9 @@ export const useAuthStore = defineStore('auth', () => {
     const { data, error } = await api.login(email, password);
 
     if (error.value) {
-      throw new Error(error.value.message || 'Sign in failed');
+      if (error.value === 'Unauthorized') {
+        throw new Error('Email ou mot de passe invalide.');
+      }
     }
 
     token.value = data.value?.token || null;
@@ -33,7 +35,9 @@ export const useAuthStore = defineStore('auth', () => {
     const { data, error } = await api.register(newUser);
 
     if (error.value) {
-      throw new Error(error.value.message || 'Sign up failed');
+      if (error.value === 'Conflict') {
+        throw new Error('Un utilisateur avec cet e-mail existe déjà.');
+      }
     }
 
     token.value = data.value?.token || null;

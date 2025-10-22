@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import UiButton from '@/components/ui/ui-button.vue';
+import { useFormValidation } from '@/composables/use-form-validation';
+import { loginSchema } from '@/schemas';
+import UiInput from '@/components/ui/ui-input.vue';
+
+const { validate, getError } = useFormValidation(loginSchema);
 
 const email = ref('');
 const password = ref('');
@@ -10,10 +15,9 @@ const emit = defineEmits<{
 }>();
 
 const handleSubmit = () => {
-  emit('submit', {
-    email: email.value,
-    password: password.value,
-  });
+  const formData = { email: email.value, password: password.value };
+  if (!validate(formData)) return;
+  emit('submit', formData);
 };
 </script>
 
@@ -28,17 +32,21 @@ const handleSubmit = () => {
         <p>Veuillez entrer vos identifiants pour vous connecter.</p>
       </div>
       <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
-        <input
+        <UiInput
           v-model="email"
+          name="email"
           type="email"
+          label="Adresse e-mail"
           placeholder="Entrez votre adresse e-mail..."
-          class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+          :error="getError('email')"
         />
-        <input
+        <UiInput
           v-model="password"
+          name="password"
           type="password"
+          label="Mot de passe"
           placeholder="Entrez votre mot de passe..."
-          class="transition-all bg-base-100 focus-within:border-base-300 border-2 border-base-200 bg-base-50 rounded-lg p-2 outline-none w-full flex flex-col items-end gap-2"
+          :error="getError('password')"
         />
         <UiButton
           after-icon="ph:arrow-bend-up-right-bold"
