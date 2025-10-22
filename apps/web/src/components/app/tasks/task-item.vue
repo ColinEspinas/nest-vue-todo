@@ -66,7 +66,10 @@ const createdUpdatedDifference = computed(() => {
       </div>
     </header>
     <p
-      :class="['text-sm mb-3', task.completed ? 'text-base-content-300' : 'text-base-content-200']"
+      :class="[
+        'text-sm mb-3 line-clamp-6 text-ellipsis',
+        task.completed ? 'text-base-content-300' : 'text-base-content-200',
+      ]"
     >
       {{ task.description }}
     </p>
