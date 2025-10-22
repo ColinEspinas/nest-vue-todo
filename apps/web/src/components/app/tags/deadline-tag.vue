@@ -16,7 +16,10 @@ const formatDate = (date: Date | string) => {
 
 const isOverdue = (date: Date | string) => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return dateObj < new Date();
+  const overdueDate = new Date(dateObj);
+  overdueDate.setHours(0, 0, 0, 0);
+  overdueDate.setDate(overdueDate.getDate() + 1);
+  return new Date() >= overdueDate;
 };
 
 const getTooltipContent = (date: Date | string) => {
