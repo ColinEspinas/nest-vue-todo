@@ -10,6 +10,7 @@ defineProps<{
 defineEmits<{
   toggleComplete: [id: string];
   delete: [id: string];
+  edit: [id: string];
 }>();
 </script>
 
@@ -30,6 +31,7 @@ defineEmits<{
       :task
       @toggle-complete="$emit('toggleComplete', $event)"
       @delete="$emit('delete', $event)"
+      @edit="$emit('edit', $event)"
     />
   </div>
 </template>

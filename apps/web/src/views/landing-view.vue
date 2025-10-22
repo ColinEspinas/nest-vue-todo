@@ -13,7 +13,6 @@ const marketingTask = reactive<Task>({
   priority: 'high',
   createdAt: new Date(),
   updatedAt: new Date(),
-  deadline: null,
   completed: false,
 });
 </script>

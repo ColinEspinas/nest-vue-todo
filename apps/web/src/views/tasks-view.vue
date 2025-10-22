@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useTimeoutFn } from '@vueuse/core';
 import { useAuthStore } from '@/stores/auth';
 import { useTasksStore } from '@/stores/tasks';
-import { orderValues, type CreateTask, type Order } from '@/types/task';
+import { orderValues, type CreateTask, type Order, type UpdateTask } from '@/types/task';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/forms/task-create-form.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
@@ -15,6 +15,7 @@ import TaskStats from '@/components/app/tasks/task-stats.vue';
 import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vue';
 import UiPagination from '@/components/ui/ui-pagination.vue';
 import OrderSelect from '@/components/app/inputs/order-select.vue';
+import TaskEditDialog from '@/components/app/dialogs/task-edit-dialog.vue';
 
 const authStore = useAuthStore();
 const {
@@ -117,6 +118,35 @@ const taskToDelete = computed(() =>
   taskToDeleteId.value ? tasksStore.findTaskById(taskToDeleteId.value) : undefined,
 );
 
+const handleEditTask = (taskId: string) => {
+  showEditDialog.value = true;
+  taskToEditId.value = taskId;
+};
+
+const confirmEditTask = async (updatedTask: UpdateTask) => {
+  if (taskToEditId.value) {
+    try {
+      await tasksStore.updateTask(taskToEditId.value, updatedTask);
+    } catch (error) {
+      console.error('Failed to edit task:', error);
+    }
+  }
+  showEditDialog.value = false;
+  taskToEditId.value = null;
+};
+
+const showEditDialog = ref(false);
+const taskToEditId = ref<string | null>(null);
+
+const taskToEdit = computed(() => {
+  return taskToEditId.value ? tasksStore.findTaskById(taskToEditId.value) : undefined;
+});
+
+const closeEditDialog = () => {
+  showEditDialog.value = false;
+  taskToEditId.value = null;
+};
+
 const handleSubmit = async (task: CreateTask) => {
   try {
     await tasksStore.createTask(task);
@@ -163,6 +193,7 @@ const handleSubmit = async (task: CreateTask) => {
           :tasks
           @toggle-complete="handleToggleComplete"
           @delete="handleDeleteTask"
+          @edit="handleEditTask"
         />
       </section>
 
@@ -180,6 +211,14 @@ const handleSubmit = async (task: CreateTask) => {
       :task="taskToDelete"
       @close="closeDeleteDialog"
       @confirm="confirmDeleteTask"
+    />
+
+    <TaskEditDialog
+      v-if="taskToEdit"
+      :open="showEditDialog"
+      :task="taskToEdit"
+      @close="closeEditDialog"
+      @confirm="confirmEditTask"
     />
   </div>
 </template>

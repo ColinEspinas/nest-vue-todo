@@ -39,7 +39,6 @@ const currentDirectionDetails = computed(
 );
 
 const syncOrder = () => {
-  console.log('syncing order', property.value, direction.value);
   order.value = `${property.value}_${direction.value}` as Order;
 };
 

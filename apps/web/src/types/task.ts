@@ -4,7 +4,7 @@ export interface Task {
   description: string;
   priority: 'high' | 'low' | 'medium';
   completed: boolean;
-  deadline: Date | null;
+  deadline?: Date | null;
   createdAt: Date;
   updatedAt: Date;
   userId: string;
@@ -14,7 +14,7 @@ export interface CreateTask {
   title: string;
   description: string;
   priority: 'high' | 'low' | 'medium';
-  deadline?: Date;
+  deadline?: Date | null;
 }
 
 export interface UpdateTask {
@@ -22,7 +22,7 @@ export interface UpdateTask {
   description?: string;
   priority?: 'high' | 'low' | 'medium';
   completed?: boolean;
-  deadline?: Date;
+  deadline?: Date | null;
 }
 
 export const orderValues = [

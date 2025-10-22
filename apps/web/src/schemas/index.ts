@@ -21,5 +21,5 @@ export const createTaskSchema = z.object({
     .min(1, 'La description est requise.')
     .max(256, 'La description ne peut pas dépasser 256 caractères.'),
   priority: z.enum(['high', 'medium', 'low']),
-  deadline: z.date().optional(),
+  deadline: z.date().optional().nullable(),
 });

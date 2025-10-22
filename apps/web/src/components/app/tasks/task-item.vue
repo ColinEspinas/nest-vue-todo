@@ -15,6 +15,7 @@ defineProps<{
 defineEmits<{
   toggleComplete: [id: string];
   delete: [id: string];
+  edit: [id: string];
 }>();
 </script>
 
@@ -36,7 +37,18 @@ defineEmits<{
           {{ task.title }}
         </h3>
       </div>
-      <div v-if="!hideActions" class="md:opacity-0 group-hover:opacity-100 transition-opacity">
+      <div
+        v-if="!hideActions"
+        class="flex gap-1 md:opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <UiButton
+          variant="ghost"
+          size="sm"
+          shape="rounded"
+          before-icon="ph:pencil"
+          aria-label="Modifier la tâche"
+          @click="$emit('edit', task.id)"
+        />
         <UiButton
           variant="ghost"
           size="sm"
