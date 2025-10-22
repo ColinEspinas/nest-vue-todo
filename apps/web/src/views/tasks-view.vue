@@ -127,7 +127,7 @@ const handleSubmit = async (task: CreateTask) => {
 </script>
 
 <template>
-  <main>
+  <div>
     <section class="mb-4 bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
       <TaskCreateForm @submit="handleSubmit" :loading="delayedCreationLoading" />
     </section>
@@ -178,5 +178,5 @@ const handleSubmit = async (task: CreateTask) => {
       @close="closeDeleteDialog"
       @confirm="confirmDeleteTask"
     />
-  </main>
+  </div>
 </template>

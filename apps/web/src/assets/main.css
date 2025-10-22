@@ -20,5 +20,10 @@
     background-color: var(--color-base-100);
     color: var(--color-base-content-100);
     font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+
+  #app {
+    min-height: 100vh;
   }
 }
