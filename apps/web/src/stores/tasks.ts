@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from 'pinia';
 import { ref, computed } from 'vue';
 import { useTasksApi } from '@/composables/api/use-tasks-api';
-import type { Task, CreateTask, UpdateTask } from '@/types/task';
+import type { Task, CreateTask, UpdateTask, Order } from '@/types/task';
 import { useAuthStore } from './auth';
 
 export const useTasksStore = defineStore('tasks', () => {
@@ -29,7 +29,7 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   };
 
-  const fetchTasks = async (options?: { limit?: number; offset?: number }) => {
+  const fetchTasks = async (options?: { limit?: number; offset?: number; order?: Order }) => {
     loading.value = true;
     error.value = null;
 

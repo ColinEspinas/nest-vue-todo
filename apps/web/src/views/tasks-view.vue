@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useTimeoutFn } from '@vueuse/core';
 import { useAuthStore } from '@/stores/auth';
 import { useTasksStore } from '@/stores/tasks';
-import type { CreateTask } from '@/types/task';
+import { orderValues, type CreateTask, type Order } from '@/types/task';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/tasks/task-create-form.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
@@ -14,6 +14,7 @@ import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue'
 import TaskStats from '@/components/app/tasks/task-stats.vue';
 import TaskStatsSkeleton from '@/components/app/skeletons/task-stats-skeleton.vue';
 import UiPagination from '@/components/ui/ui-pagination.vue';
+import OrderSelect from '@/components/app/inputs/order-select.vue';
 
 const authStore = useAuthStore();
 const {
@@ -54,22 +55,26 @@ const maxPage = computed(() =>
   Math.max(1, Math.ceil((Number(totalTasksStat.value) || 0) / limit.value)),
 );
 
+const queryOrder = route.query.order as Order | undefined;
+const initialOrder = queryOrder && orderValues.includes(queryOrder) ? queryOrder : orderValues[0];
+const order = ref<Order>(initialOrder);
+
 const fetchPage = async () => {
-  await tasksStore.fetchTasks({ limit: limit.value, offset: offset.value });
+  await tasksStore.fetchTasks({ limit: limit.value, offset: offset.value, order: order.value });
 };
 
-watch([page, limit, totalTasksStat], () => {
+watch([page, limit, totalTasksStat, order], () => {
   if (page.value < 1) page.value = 1;
   else if (page.value > maxPage.value) page.value = maxPage.value;
   fetchPage();
-  router.replace({ query: { ...route.query, page: page.value } });
+  router.replace({ query: { ...route.query, page: page.value, order: order.value } });
 });
 
 onMounted(async () => {
   if (page.value < 1) page.value = 1;
   else if (page.value > maxPage.value) page.value = maxPage.value;
   try {
-    await tasksStore.fetchTasks();
+    await fetchPage();
   } catch (error) {
     console.error('Failed to load tasks:', error);
   }
@@ -119,8 +124,6 @@ const handleSubmit = async (task: CreateTask) => {
     console.error('Failed to create task:', error);
   }
 };
-
-onMounted(fetchPage);
 </script>
 
 <template>
@@ -143,7 +146,8 @@ onMounted(fetchPage);
         />
       </section>
 
-      <section v-if="totalTasksStat > 0" class="flex justify-end mb-4">
+      <section v-if="totalTasksStat > 0" class="flex justify-between mb-4">
+        <OrderSelect v-model="order" class="mr-4" @update:model-value="fetchPage" />
         <UiPagination v-model:page="page" :limit="limit" :total="totalTasksStat" class=" " />
       </section>
 

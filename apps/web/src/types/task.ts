@@ -24,3 +24,14 @@ export interface UpdateTask {
   completed?: boolean;
   deadline?: Date;
 }
+
+export const orderValues = [
+  'created_desc',
+  'created_asc',
+  'deadline_asc',
+  'deadline_desc',
+  'priority_asc',
+  'priority_desc',
+] as const;
+
+export type Order = (typeof orderValues)[number];
