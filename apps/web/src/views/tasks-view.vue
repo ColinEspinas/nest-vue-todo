@@ -162,7 +162,7 @@ const handleSubmit = async (task: CreateTask) => {
       </section>
 
       <UiPagination
-        v-if="totalTasksStat > 0"
+        v-if="maxPage > 1"
         v-model:page="page"
         :limit="limit"
         :total="totalTasksStat"
