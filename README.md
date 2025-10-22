@@ -58,16 +58,7 @@
    npm install
    ```
 
-3. **Appliquer les migrations et générer le client Prisma**
-
-   ```bash
-   cd apps/api
-   npx prisma migrate dev   # Appliquer les migrations (création de la base)
-   npx prisma generate      # Générer le client Prisma
-   cd ../..
-   ```
-
-4. **Configurer les variables d'environnement**
+3. **Configurer les variables d'environnement**
 
    Vous pouvez copier les fichiers d'exemple fournis :
 
@@ -77,6 +68,15 @@
    ```
 
    Voir la [section Variables d'environnement](#variables-denvironnement) pour la configuration détaillée.
+
+4. **Appliquer les migrations et générer le client Prisma**
+
+   ```bash
+   cd apps/api
+   npx prisma migrate dev   # Appliquer les migrations (création de la base)
+   npx prisma generate      # Générer le client Prisma
+   cd ../..
+   ```
 
 5. **Lancer l'application**
 
