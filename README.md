@@ -2,6 +2,8 @@
 
 > Application de gestion de tâches moderne, rapide et typée, construite avec Vue 3, NestJS, Prisma et Turborepo.
 
+![alt text](.github/assets/image.png)
+
 ---
 
 ## ✨ Fonctionnalités
