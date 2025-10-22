@@ -5,8 +5,10 @@ import PriorityTag from '@/components/app/tags/priority-tag.vue';
 import DeadlineTag from '@/components/app/tags/deadline-tag.vue';
 import CreatedAtTag from '@/components/app/tags/created-at-tag.vue';
 import UiButton from '@/components/ui/ui-button.vue';
+import UpdatedAtTag from '../tags/updated-at-tag.vue';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   task: Task;
   hideActions?: boolean;
   disabledCheckbox?: boolean;
@@ -17,6 +19,10 @@ defineEmits<{
   delete: [id: string];
   edit: [id: string];
 }>();
+
+const createdUpdatedDifference = computed(() => {
+  return props.task.updatedAt.getTime() - props.task.createdAt.getTime();
+});
 </script>
 
 <template>
@@ -66,6 +72,7 @@ defineEmits<{
     </p>
     <footer class="flex items-center flex-wrap gap-2 text-xs text-base-content-300">
       <CreatedAtTag :created-at="task.createdAt" />
+      <UpdatedAtTag v-if="createdUpdatedDifference !== 0" :updated-at="task.updatedAt" />
       <DeadlineTag v-if="task.deadline" :deadline="task.deadline" />
       <PriorityTag :priority="task.priority" />
     </footer>
