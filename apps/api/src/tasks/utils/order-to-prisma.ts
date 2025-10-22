@@ -1,11 +1,11 @@
 export function orderToPrisma(
   order: string | undefined,
-): { [key: string]: 'asc' | 'desc' } | { [key: string]: 'asc' | 'desc' }[] | undefined {
+): Array<Record<string, any>> | Record<string, any> | undefined {
   switch (order) {
     case 'deadline_asc':
-      return [{ deadline: 'asc' }, { createdAt: 'desc' }];
+      return [{ deadline: { sort: 'asc', nulls: 'last' } }, { createdAt: 'desc' }];
     case 'deadline_desc':
-      return [{ deadline: 'desc' }, { createdAt: 'desc' }];
+      return [{ deadline: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }];
     case 'created_asc':
       return { createdAt: 'asc' };
     case 'created_desc':
