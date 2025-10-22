@@ -221,7 +221,6 @@ Les tests couvrent :
 
 - Ce readme n'est pas très beau car généré automatiquement puis corrigé manuellement, il faudrait le rendre plus lisible et agréable.
 - Le sort par priorité n'est pas bon, de ce que j'ai pu voir il faudrait faire une raw query mais je n'ai pas eu le temps d'aller plus loin.
-- Edition des taches en réutilisant le même composant que pour la création.
 - Meilleure page d'accueil, actuellement très basique.
 - Ajouter des tests en end-to-end (E2E) pour le frontend et le backend.
 - Ajouter un docker compose pour faciliter le développement.
