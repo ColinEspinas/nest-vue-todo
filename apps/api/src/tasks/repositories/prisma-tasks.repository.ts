@@ -4,6 +4,8 @@ import { TasksRepository } from './tasks.repository';
 import { Task } from '../entities/task.entity';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { orderToPrisma } from '../utils/order-to-prisma';
+import { Order } from '../types/order.type';
 
 @Injectable()
 export class PrismaTasksRepository extends TasksRepository {
@@ -11,10 +13,15 @@ export class PrismaTasksRepository extends TasksRepository {
     super();
   }
 
-  async findAllByUserId(userId: string, limit?: number, offset?: number): Promise<Task[]> {
+  async findAllByUserId(
+    userId: string,
+    limit?: number,
+    offset?: number,
+    order?: Order,
+  ): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany({
       where: { userId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: orderToPrisma(order),
       take: limit,
       skip: offset,
     });

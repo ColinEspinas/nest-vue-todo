@@ -5,6 +5,7 @@ import { TasksRepository } from './repositories/tasks.repository';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
+import { Order } from './types/order.type';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
@@ -72,38 +73,64 @@ describe('TasksService', () => {
   });
 
   describe('findAllByUserId', () => {
-    it('should return all tasks for a user', async () => {
+    it('should return all tasks for a user (default order)', async () => {
       const mockTasks = [mockTask];
       tasksRepository.findAllByUserId.mockResolvedValue(mockTasks);
 
-      const result = await tasksService.findAllByUserId(mockUserId, 10, 0);
+      const result = await tasksService.findAllByUserId(mockUserId, 10, 0, 'created_desc');
 
       expect(result).toEqual(mockTasks);
-      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        10,
+        0,
+        'created_desc',
+      );
       expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });
 
     it('should return empty array when user has no tasks', async () => {
       tasksRepository.findAllByUserId.mockResolvedValue([]);
 
-      const result = await tasksService.findAllByUserId(mockUserId, 10, 0);
+      const result = await tasksService.findAllByUserId(mockUserId, 10, 0, 'created_desc');
 
       expect(result).toEqual([]);
-      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        10,
+        0,
+        'created_desc',
+      );
+    });
+
+    it('should support different order values', async () => {
+      const mockTasks = [mockTask];
+      tasksRepository.findAllByUserId.mockResolvedValue(mockTasks);
+      const orders: Order[] = ['created_asc', 'deadline_desc', 'priority_asc'];
+      for (const order of orders) {
+        await tasksService.findAllByUserId(mockUserId, 10, 0, order);
+        expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, order);
+      }
     });
   });
 
   describe('findAllByUserId with pagination', () => {
-    it('should pass limit and offset to repository', async () => {
+    it('should pass limit, offset, and order to repository', async () => {
       const mockTasks = [mockTask];
       const limit = 5;
       const offset = 10;
+      const order = 'priority_desc';
       tasksRepository.findAllByUserId.mockResolvedValue(mockTasks);
 
-      const result = await tasksService.findAllByUserId(mockUserId, limit, offset);
+      const result = await tasksService.findAllByUserId(mockUserId, limit, offset, order);
 
       expect(result).toEqual(mockTasks);
-      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset);
+      expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        limit,
+        offset,
+        order,
+      );
       expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });
   });

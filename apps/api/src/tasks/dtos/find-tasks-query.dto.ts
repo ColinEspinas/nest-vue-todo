@@ -1,17 +1,24 @@
-import { IsInt, Max, Min, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsInt, Max, Min, IsOptional, IsIn } from 'class-validator';
+
+import { OrderValues } from '../types/order.type';
+import type { Order } from '../types/order.type';
+import { Type } from 'class-transformer';
 
 export class FindTasksQueryDto {
   @IsOptional()
-  @Transform(({ value }) => (value === undefined || value === '' ? 10 : Number(value)))
   @IsInt()
+  @Type(() => Number)
   @Min(1)
   @Max(25)
   limit: number = 10;
 
   @IsOptional()
-  @Transform(({ value }) => (value === undefined || value === '' ? 0 : Number(value)))
   @IsInt()
+  @Type(() => Number)
   @Min(0)
   offset: number = 0;
+
+  @IsOptional()
+  @IsIn(OrderValues)
+  order?: Order = 'created_desc';
 }

@@ -8,6 +8,7 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { PayloadUser } from '../auth/types/payload-user.type';
 import { FindTasksQueryDto } from './dtos/find-tasks-query.dto';
+import { Order } from './types/order.type';
 
 describe('TasksController', () => {
   let tasksController: TasksController;
@@ -79,13 +80,13 @@ describe('TasksController', () => {
   });
 
   describe('GET /tasks', () => {
-    it('should return all tasks for authenticated user with default pagination', async () => {
+    it('should return all tasks for authenticated user with default pagination and order', async () => {
       const mockTasks = [mockTask];
       tasksService.findAllByUserId.mockResolvedValue(mockTasks);
       const defaultQueryDto = new FindTasksQueryDto();
       const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual(mockTasks);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, 'created_desc');
     });
 
     it('should return empty array when user has no tasks', async () => {
@@ -93,20 +94,38 @@ describe('TasksController', () => {
       const defaultQueryDto = new FindTasksQueryDto();
       const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual([]);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, 'created_desc');
+    });
+
+    it('should support different order values', async () => {
+      const mockTasks = [mockTask];
+      tasksService.findAllByUserId.mockResolvedValue(mockTasks);
+      const orders: Order[] = ['created_asc', 'deadline_desc', 'priority_asc'];
+      for (const order of orders) {
+        const queryDto = new FindTasksQueryDto();
+        queryDto.limit = 10;
+        queryDto.offset = 0;
+        queryDto.order = order;
+        await tasksController.findAll(mockRequest, queryDto);
+        expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, order);
+      }
     });
   });
 
   describe('GET /tasks with pagination', () => {
-    it('should pass limit and offset to service', async () => {
+    it('should pass limit, offset, and order to service', async () => {
       const mockTasks = [mockTask];
       const limit = 5;
       const offset = 10;
+      const order = 'priority_desc';
       tasksService.findAllByUserId.mockResolvedValue(mockTasks);
-      const queryDto = { limit, offset };
+      const queryDto = new FindTasksQueryDto();
+      queryDto.limit = limit;
+      queryDto.offset = offset;
+      queryDto.order = order;
       const result = await tasksController.findAll(mockRequest, queryDto);
       expect(result).toEqual(mockTasks);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset, order);
       expect(tasksService.findAllByUserId).toHaveBeenCalledTimes(1);
     });
   });

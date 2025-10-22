@@ -29,7 +29,12 @@ export class TasksController {
     @Req() request: Request & { user: PayloadUser },
     @Query(new ValidationPipe({ transform: true })) query: FindTasksQueryDto,
   ) {
-    return this.tasksService.findAllByUserId(request.user.id, query.limit, query.offset);
+    return this.tasksService.findAllByUserId(
+      request.user.id,
+      query.limit,
+      query.offset,
+      query.order,
+    );
   }
 
   @Get(':id')
