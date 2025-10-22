@@ -152,7 +152,9 @@ const handleSubmit = async (task: CreateTask) => {
       </section>
 
       <section>
-        <TaskListSkeleton v-if="loadingTasks && tasks.length === 0" />
+        <TaskListSkeleton
+          v-if="loadingTasks && tasks.length === 0 && !loadingUser && totalTasksStat !== 0"
+        />
         <TaskList
           v-else
           :tasks
