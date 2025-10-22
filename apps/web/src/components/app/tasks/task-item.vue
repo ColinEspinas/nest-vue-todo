@@ -36,9 +36,10 @@ const createdUpdatedDifference = computed(() => {
         />
         <h3
           :class="[
-            'font-semibold',
+            'font-semibold max-w-96 text-ellipsis line-clamp-1',
             task.completed ? 'line-through text-base-content-300' : 'text-base-content-100',
           ]"
+          :title="task.title"
         >
           {{ task.title }}
         </h3>
@@ -70,6 +71,7 @@ const createdUpdatedDifference = computed(() => {
         'text-sm mb-3 line-clamp-6 text-ellipsis',
         task.completed ? 'text-base-content-300' : 'text-base-content-200',
       ]"
+      :title="task.description"
     >
       {{ task.description }}
     </p>

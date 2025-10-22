@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {
   DialogRoot,
+  DialogPortal,
+  DialogOverlay,
   DialogContent,
   DialogClose,
   VisuallyHidden,
@@ -46,10 +48,13 @@ const handleTaskUpdate = (task: UpdateTask) => {
 
 <template>
   <DialogRoot :open="open" @update:open="(val) => !val && $emit('close')">
-    <DialogContent
-      class="fixed inset-0 z-50 flex items-center justify-center bg-base-content-100/30"
-    >
-      <div class="max-w-xl px-4">
+    <DialogPortal>
+      <DialogOverlay
+        class="fixed inset-0 z-30 flex items-center justify-center bg-base-content-100/30"
+      />
+      <DialogContent
+        class="max-w-xl px-4 z-50 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] -ml-[calc(var(--scrollbar-width)/2)]"
+      >
         <div
           class="bg-base-100 rounded-2xl shadow-lg border-2 border-base-300 p-4 flex flex-col items-center"
         >
@@ -75,7 +80,7 @@ const handleTaskUpdate = (task: UpdateTask) => {
             </div>
           </div>
         </div>
-      </div>
-    </DialogContent>
+      </DialogContent>
+    </DialogPortal>
   </DialogRoot>
 </template>
