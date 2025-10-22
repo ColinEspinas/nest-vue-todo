@@ -217,6 +217,12 @@ Les tests couvrent :
 
 ---
 
+### Points d'amélioration
+
+- Ajouter des tests end-to-end (E2E) pour le frontend et le backend.
+- Le sort par priorité n'est pas bon, de ce que j'ai pu voir il faudrait faire une raw query mais je n'ai pas eu le temps d'aller plus loin.
+- Améliorer la gestion des erreurs dans l'interface utilisateur.
+
 ## 📝 Licence
 
 Ce projet est sous licence MIT.
