@@ -82,14 +82,16 @@ export const useTasksStore = defineStore('tasks', () => {
   const updateTask = async (id: string, task: UpdateTask) => {
     error.value = null;
 
+    const originalTask = findTaskById(id);
+    replaceTask({ ...originalTask, ...task } as Task);
+
     const { data, error: apiError } = await api.updateTask(id, task);
     if (apiError.value) {
       error.value = 'Échec de la mise à jour de la tâche';
+      if (originalTask) {
+        replaceTask(originalTask);
+      }
       return;
-    }
-
-    if (data.value) {
-      replaceTask(data.value);
     }
     return data.value;
   };
@@ -97,15 +99,20 @@ export const useTasksStore = defineStore('tasks', () => {
   const deleteTask = async (id: string) => {
     error.value = null;
 
+    const deletedTask = findTaskById(id);
+    const originalIndex = tasks.value.findIndex((task) => task.id === id);
+    tasks.value = tasks.value.filter((task) => task.id !== id);
+    totalTasksStat.value -= 1;
+
     const { data, error: apiError } = await api.deleteTask(id);
     if (apiError.value) {
       error.value = 'Échec de la suppression de la tâche';
-
+      if (deletedTask && originalIndex !== -1) {
+        tasks.value.splice(originalIndex, 0, deletedTask);
+        totalTasksStat.value += 1;
+      }
       return;
     }
-
-    tasks.value = tasks.value.filter((task) => task.id !== id);
-    totalTasksStat.value -= 1;
 
     return data.value;
   };
@@ -117,19 +124,19 @@ export const useTasksStore = defineStore('tasks', () => {
     const completed = task.completed;
     task.completed = !task.completed;
 
+    completedTasksStat.value += task.completed ? 1 : -1;
+
     const { data, error: apiError } = await api.updateTask(id, { completed: task.completed });
     if (apiError.value) {
       task.completed = completed;
       error.value = 'Échec de la mise à jour de la tâche';
-
+      completedTasksStat.value += task.completed ? 1 : -1;
       return;
     }
 
     if (data.value) {
       replaceTask(data.value);
     }
-
-    completedTasksStat.value += task.completed ? 1 : -1;
 
     return data.value;
   };
