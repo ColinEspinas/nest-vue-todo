@@ -14,6 +14,7 @@ model User {
   name     String
   password String
   tasks    Task[]
+  tags     Tag[]
 }
 
 model Task {
@@ -27,6 +28,19 @@ model Task {
   updatedAt   DateTime  @updatedAt
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        Tag[]
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  color     String?
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks     Task[]
+
+  @@unique([userId, name])
 }
 
 enum Priority {

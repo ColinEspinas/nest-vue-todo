@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MinLength, MaxLength, IsIn, IsDate } from 'class-validator';
+import { IsString, IsOptional, MinLength, MaxLength, IsIn, IsDate, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateTaskDto {
@@ -20,4 +20,8 @@ export class CreateTaskDto {
   @Type(() => Date)
   @IsDate()
   deadline?: Date;
+
+  @IsArray()
+  @IsString({ each: true })
+  tagIds: string[] = [];
 }

@@ -24,6 +24,7 @@ export class PrismaTasksRepository extends TasksRepository {
       orderBy: orderToPrisma(order),
       take: limit,
       skip: offset,
+      include: { tags: true },
     });
     return tasks as Task[];
   }
@@ -31,30 +32,47 @@ export class PrismaTasksRepository extends TasksRepository {
   async findById(id: string, userId: string): Promise<Task | null> {
     const task = await this.prisma.task.findFirst({
       where: { id, userId },
+      include: { tags: true },
     });
     return task as Task | null;
   }
 
   async create(createTaskDto: CreateTaskDto, userId: string): Promise<Task> {
+    const { tagIds, ...taskData } = createTaskDto;
     const task = await this.prisma.task.create({
       data: {
-        ...createTaskDto,
-        deadline: createTaskDto.deadline || null,
+        ...taskData,
+        deadline: taskData.deadline || null,
         userId,
+        tags: tagIds
+          ? {
+              connect: tagIds.map((id) => ({ id })),
+            }
+          : undefined,
       },
+      include: { tags: true },
     });
     return task as Task;
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto, userId: string): Promise<Task | null> {
     try {
+      const { tagIds, ...otherData } = updateTaskDto;
       const data = Object.fromEntries(
-        Object.entries(updateTaskDto).filter(([, value]) => value !== undefined),
+        Object.entries(otherData).filter(([, value]) => value !== undefined),
       );
 
       const task = await this.prisma.task.update({
         where: { id, userId },
-        data,
+        data: {
+          ...data,
+          ...(tagIds !== undefined && {
+            tags: {
+              set: tagIds.map((id) => ({ id })),
+            },
+          }),
+        },
+        include: { tags: true },
       });
       return task as Task;
     } catch {
@@ -66,6 +84,7 @@ export class PrismaTasksRepository extends TasksRepository {
     try {
       const task = await this.prisma.task.delete({
         where: { id, userId },
+        include: { tags: true },
       });
       return task as Task;
     } catch {

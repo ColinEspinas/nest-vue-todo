@@ -6,6 +6,7 @@ import {
   MaxLength,
   IsIn,
   IsDate,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -35,4 +36,9 @@ export class UpdateTaskDto {
   @Type(() => Date)
   @IsDate()
   deadline?: Date;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tagIds?: string[];
 }

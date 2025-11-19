@@ -1,3 +1,13 @@
+export class Tag {
+  constructor(
+    public id: string,
+    public name: string,
+    public color: string | null,
+    public createdAt: Date,
+    public userId: string,
+  ) {}
+}
+
 export class Task {
   constructor(
     public id: string,
@@ -9,5 +19,6 @@ export class Task {
     public createdAt: Date = new Date(),
     public updatedAt: Date = new Date(),
     public userId: string,
+    public tags: Tag[] = [],
   ) {}
 }

@@ -14,6 +14,7 @@ const marketingTask = reactive<Task>({
   createdAt: new Date(),
   updatedAt: new Date(),
   completed: false,
+  tags: [],
 });
 </script>
 

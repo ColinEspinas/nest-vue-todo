@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useTimeoutFn } from '@vueuse/core';
 import { useAuthStore } from '@/stores/auth';
 import { useTasksStore } from '@/stores/tasks';
+import { useTagsStore } from '@/stores/tags';
 import { orderValues, type CreateTask, type Order, type UpdateTask } from '@/types/task';
 import ErrorMessage from '@/components/app/error-message.vue';
 import TaskCreateForm from '@/components/app/forms/task-create-form.vue';
@@ -27,6 +28,8 @@ const {
 
 const tasksStore = useTasksStore();
 const { tasks, loading: loadingTasks, error, creating } = storeToRefs(tasksStore);
+
+const tagsStore = useTagsStore();
 
 const delayedCreationLoading = ref(false);
 const { start, stop } = useTimeoutFn(
@@ -75,7 +78,7 @@ onMounted(async () => {
   if (page.value < 1) page.value = 1;
   else if (page.value > maxPage.value) page.value = maxPage.value;
   try {
-    await fetchPage();
+    await Promise.all([fetchPage(), tagsStore.fetchTags()]);
   } catch (error) {
     console.error('Failed to load tasks:', error);
   }
@@ -147,8 +150,16 @@ const closeEditDialog = () => {
   taskToEditId.value = null;
 };
 
-const handleSubmit = async (task: CreateTask) => {
+const handleSubmit = async (
+  task: CreateTask,
+  tagsToCreate: Array<{ name: string; color?: string }>,
+) => {
   try {
+    if (tagsToCreate.length > 0) {
+      const newTags = await tagsStore.createTags(tagsToCreate);
+      task.tagIds.push(...newTags.map((tag) => tag.id));
+    }
+
     await tasksStore.createTask(task);
   } catch (error) {
     console.error('Failed to create task:', error);
