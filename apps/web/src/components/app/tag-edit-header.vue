@@ -135,7 +135,13 @@ const handleColorUpdate = (color: string | null) => {
       </div>
     </div>
     <div class="flex gap-2">
-      <UiButton variant="ghost" shape="rounded" @click="$emit('delete')" before-icon="ph:trash">
+      <UiButton
+        variant="ghost"
+        size="sm"
+        shape="rounded"
+        @click="$emit('delete')"
+        before-icon="ph:trash"
+      >
       </UiButton>
     </div>
   </div>
