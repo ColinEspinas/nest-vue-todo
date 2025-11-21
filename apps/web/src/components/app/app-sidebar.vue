@@ -26,6 +26,8 @@ const logoutHandler = () => {
 
 // Inline tag creation
 const isCreatingTag = ref(false);
+
+const tagNameMaxLength = 32;
 const newTagName = ref('');
 const newTagColor = ref('');
 const newTagInputRef = useTemplateRef<HTMLInputElement>('newTagInput');
@@ -46,11 +48,14 @@ const startCreatingTag = async () => {
  */
 const handleTagNameInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  const normalizedValue = target.value.replace(/\s+/g, '-');
+  let normalizedValue = target.value.replace(/\s+/g, '-');
+  if (normalizedValue.length > tagNameMaxLength) {
+    normalizedValue = normalizedValue.slice(0, tagNameMaxLength);
+  }
   if (target.value !== normalizedValue) {
     target.value = normalizedValue;
-    newTagName.value = normalizedValue;
   }
+  newTagName.value = normalizedValue;
 };
 
 /**
@@ -175,6 +180,7 @@ watch(
                 @keyup.escape="cancelCreatingTag"
                 @blur="saveNewTag"
                 :placeholder="t('tags.tagNamePlaceholder')"
+                :maxlength="tagNameMaxLength"
                 class="flex-1 bg-transparent outline-none min-w-0 placeholder:text-base-content-100/60"
               />
             </div>

@@ -15,6 +15,8 @@ const emit = defineEmits<{
   delete: [];
 }>();
 
+
+const tagNameMaxLength = 32;
 const isEditingTagName = ref(false);
 const tagNameRef = useTemplateRef<HTMLElement>('tagNameRef');
 const originalTagName = ref('');
@@ -34,7 +36,13 @@ const moveCursorToEnd = (element: HTMLElement) => {
 /**
  * Replaces spaces with hyphens in the tag name
  */
-const normalizeTagName = (text: string) => text.replace(/\s+/g, '-');
+const normalizeTagName = (text: string) => {
+  let normalized = text.replace(/\s+/g, '-');
+  if (normalized.length > tagNameMaxLength) {
+    normalized = normalized.slice(0, tagNameMaxLength);
+  }
+  return normalized;
+};
 
 /**
  * Starts editing mode for the tag name
