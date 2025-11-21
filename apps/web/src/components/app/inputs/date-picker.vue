@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { CalendarDate, type DateValue } from '@internationalized/date';
 import {
   PopoverRoot,
@@ -20,12 +21,14 @@ import {
 } from 'reka-ui';
 import UiButton from '../../ui/ui-button.vue';
 
+const { t } = useI18n();
+
 interface Props {
   placeholder?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'Sélectionner une date',
+  placeholder: '',
 });
 
 const selectedDate = defineModel<Date | null>();
@@ -50,7 +53,7 @@ const buttonText = computed(() => {
   if (selectedDate.value) {
     return selectedDate.value.toLocaleDateString();
   }
-  return props.placeholder;
+  return props.placeholder || t('tasks.form.selectDate');
 });
 
 const calendarValue = computed(() => {
@@ -195,14 +198,14 @@ const minDate = computed(() => {
           <UiButton
             variant="ghost"
             size="sm"
-            text="Effacer"
+            :text="t('tasks.form.clearDate')"
             @click="clearSelection"
             class="flex-1"
           />
           <UiButton
             variant="primary"
             size="sm"
-            text="Aujourd'hui"
+            :text="t('tasks.form.today')"
             @click="selectToday"
             class="flex-1"
           />

@@ -1,25 +1,23 @@
 import { z } from 'zod';
 
+// Create schemas with i18n support - messages will be translation keys
 export const loginSchema = z.object({
-  email: z.email('Adresse email invalide.'),
-  password: z.string().min(1, 'Le mot de passe est requis.'),
+  email: z.string().email('validation.email.invalid'),
+  password: z.string().min(1, 'validation.password.required'),
 });
 
 export const registerSchema = z.object({
-  name: z.string().min(1, 'Le nom est requis.'),
-  email: z.email('Adresse email invalide.'),
-  password: z.string().min(8, 'Le mot de passe doit contenir au moins 8 caractères.'),
+  name: z.string().min(1, 'validation.name.required'),
+  email: z.string().email('validation.email.invalid'),
+  password: z.string().min(8, 'validation.password.minLength'),
 });
 
 export const createTaskSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Le titre est requis.')
-    .max(50, 'Le titre ne peut pas dépasser 50 caractères.'),
+  title: z.string().min(1, 'validation.title.required').max(50, 'validation.title.maxLength'),
   description: z
     .string()
-    .min(1, 'La description est requise.')
-    .max(256, 'La description ne peut pas dépasser 256 caractères.'),
+    .min(1, 'validation.description.required')
+    .max(256, 'validation.description.maxLength'),
   priority: z.enum(['high', 'medium', 'low']),
   deadline: z.date().optional().nullable(),
 });

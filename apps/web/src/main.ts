@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from './router';
+import i18n from './i18n';
 import { setupGuards } from './router/guards';
 import { useAuthStore } from './stores/auth';
 
@@ -14,6 +15,8 @@ async function bootstrap() {
   const pinia = createPinia();
 
   app.use(pinia);
+  app.use(i18n);
+
   const auth = useAuthStore();
   await auth.restore();
 

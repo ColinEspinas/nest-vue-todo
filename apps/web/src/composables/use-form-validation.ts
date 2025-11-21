@@ -1,7 +1,9 @@
 import { ref } from 'vue';
 import { type z } from 'zod';
+import { useI18n } from 'vue-i18n';
 
 export function useFormValidation<T extends z.ZodSchema>(schema: T) {
+  const { t } = useI18n();
   const errors = ref<Record<string, string>>({});
 
   const validate = (data: unknown): data is z.infer<T> => {
@@ -13,7 +15,8 @@ export function useFormValidation<T extends z.ZodSchema>(schema: T) {
       result.error.issues.forEach((issue) => {
         const field = issue.path.join('.');
         if (field) {
-          fieldErrors[field] = issue.message;
+          // Translate the error message if it's a translation key
+          fieldErrors[field] = t(issue.message);
         }
       });
 

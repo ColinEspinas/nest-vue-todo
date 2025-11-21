@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { Task } from '@/types/task';
 import UiCheckbox from '@/components/ui/ui-checkbox.vue';
 import PriorityChip from '@/components/app/chips/priority-chip.vue';
@@ -8,6 +9,8 @@ import UpdatedAtChip from '@/components/app/chips/updated-at-chip.vue';
 import TagChip from '@/components/app/chips/tag-chip.vue';
 import UiButton from '@/components/ui/ui-button.vue';
 import { computed } from 'vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   task: Task;
@@ -54,7 +57,7 @@ const createdUpdatedDifference = computed(() => {
           size="sm"
           shape="rounded"
           before-icon="ph:pencil"
-          aria-label="Modifier la tâche"
+          :aria-label="t('tasks.actions.edit')"
           @click="$emit('edit', task.id)"
         />
         <UiButton
@@ -62,7 +65,7 @@ const createdUpdatedDifference = computed(() => {
           size="sm"
           shape="rounded"
           before-icon="ph:trash"
-          aria-label="Supprimer la tâche"
+          :aria-label="t('tasks.actions.delete')"
           @click="$emit('delete', task.id)"
         />
       </div>

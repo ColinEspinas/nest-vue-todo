@@ -25,7 +25,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   maxLength: 50,
-  placeholder: 'Entrez le titre de la tâche (utilisez #tag pour ajouter des tags)',
+  placeholder: '',
 });
 
 const emit = defineEmits<{

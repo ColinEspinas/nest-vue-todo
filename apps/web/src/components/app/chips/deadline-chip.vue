@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import UiTag from '../../ui/ui-tag.vue';
 import UiTooltip from '../../ui/ui-tooltip.vue';
+
+const { t, locale } = useI18n();
 
 defineProps<{
   deadline: Date | string;
@@ -8,7 +11,7 @@ defineProps<{
 
 const formatDate = (date: Date | string) => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return dateObj.toLocaleDateString('fr-FR', {
+  return dateObj.toLocaleDateString(locale.value, {
     month: 'short',
     day: 'numeric',
   });
@@ -27,17 +30,20 @@ const getTooltipContent = (date: Date | string) => {
   const now = new Date();
   const isOverdueFlag = dateObj < now;
 
-  const fullDate = `${dateObj.toLocaleDateString('fr-FR', {
+  const formattedDate = dateObj.toLocaleDateString(locale.value, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  })} à ${dateObj.toLocaleTimeString('fr-FR', {
+  });
+  const formattedTime = dateObj.toLocaleTimeString(locale.value, {
     hour: '2-digit',
     minute: '2-digit',
-  })}`;
+  });
 
-  return isOverdueFlag ? `Échéance dépassée le ${fullDate}` : `Échéance prévue le ${fullDate}`;
+  return isOverdueFlag
+    ? t('tasks.time.deadlineOverdue', { date: formattedDate, time: formattedTime })
+    : t('tasks.time.deadlineScheduled', { date: formattedDate, time: formattedTime });
 };
 </script>
 

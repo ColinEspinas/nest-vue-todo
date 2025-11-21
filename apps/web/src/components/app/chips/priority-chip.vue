@@ -1,18 +1,16 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import UiTag from '../../ui/ui-tag.vue';
 import UiTooltip from '../../ui/ui-tooltip.vue';
+
+const { t } = useI18n();
 
 defineProps<{
   priority: 'high' | 'medium' | 'low';
 }>();
 
 const getPriorityLabel = (priority: string) => {
-  const labels: Record<string, string> = {
-    high: 'Haute',
-    medium: 'Moyenne',
-    low: 'Basse',
-  };
-  return labels[priority] || priority;
+  return t(`tasks.priority.${priority}`);
 };
 
 const getPriorityIconColor = (priority: string) => {
@@ -29,12 +27,7 @@ const getPriorityIconColor = (priority: string) => {
 };
 
 const getTooltipContent = (priority: 'high' | 'medium' | 'low') => {
-  const descriptions: Record<string, string> = {
-    high: "Priorité haute - À traiter en premier, même si l'échéance est lointaine",
-    medium: "Priorité normale - À traiter selon l'ordre des échéances",
-    low: 'Priorité basse - À traiter quand le temps le permet',
-  };
-  return descriptions[priority] || 'Priorité non définie';
+  return t(`tasks.priority.tooltip.${priority}`);
 };
 </script>
 

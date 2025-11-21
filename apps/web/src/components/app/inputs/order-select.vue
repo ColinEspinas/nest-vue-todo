@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
 import type { Order } from '@/types/task';
 import { Icon } from '@iconify/vue';
@@ -12,6 +13,8 @@ import {
 } from 'reka-ui';
 import { ref, computed } from 'vue';
 
+const { t } = useI18n();
+
 type Directions = 'asc' | 'desc';
 type Properties = 'created' | 'deadline' | 'priority';
 
@@ -21,15 +24,23 @@ const property = ref<Properties>(order.value.split('_')[0] as Properties);
 const direction = ref<Directions>(order.value.split('_')[1] as Directions);
 
 const propertiesDetails = [
-  { value: 'created', label: 'Création', icon: 'ph:calendar-plus', color: 'text-base-content-100' },
-  { value: 'deadline', label: 'Échéance', icon: 'ph:calendar-check', color: 'text-accent' },
-  { value: 'priority', label: 'Priorité', icon: 'ph:flag-bold', color: 'text-error' },
+  { value: 'created', icon: 'ph:calendar-plus', color: 'text-base-content-100' },
+  { value: 'deadline', icon: 'ph:calendar-check', color: 'text-accent' },
+  { value: 'priority', icon: 'ph:flag-bold', color: 'text-error' },
 ] as const;
 
 const directionsDetails = [
-  { value: 'asc', label: 'Ascendant', icon: 'ph:arrow-up-bold' },
-  { value: 'desc', label: 'Descendant', icon: 'ph:arrow-down-bold' },
+  { value: 'asc', icon: 'ph:arrow-up-bold' },
+  { value: 'desc', icon: 'ph:arrow-down-bold' },
 ] as const;
+
+const getPropertyLabel = (value: Properties) => {
+  return t(`tasks.sort.property.${value}`);
+};
+
+const getDirectionLabel = (value: Directions) => {
+  return t(`tasks.sort.direction.${value}`);
+};
 
 const currentPropertyDetails = computed(
   () => propertiesDetails.find((p) => p.value === property.value) || propertiesDetails[0],
@@ -53,7 +64,7 @@ const handleDirectionToggle = () => {
     <SelectRoot v-model="property" @update:model-value="syncOrder" modal>
       <SelectTrigger
         class="flex items-center justify-between gap-2 text-sm py-1.5 px-3 rounded-lg bg-base-100 text-base-content-100 border-2 border-base-content-100/20 ring-0 ring-base-content-100/10 hover:ring-3 focus:ring-3 transition-all outline-none cursor-pointer"
-        aria-label="Sélectionner la propriété de tri"
+        :aria-label="t('tasks.sort.selectLabel')"
       >
         <div class="flex items-center gap-2">
           <Icon
@@ -61,7 +72,7 @@ const handleDirectionToggle = () => {
             :class="[currentPropertyDetails.color]"
             size="18"
           />
-          <span>{{ currentPropertyDetails.label }}</span>
+          <span>{{ getPropertyLabel(currentPropertyDetails.value) }}</span>
         </div>
         <Icon
           icon="ph:caret-down-bold"
@@ -84,14 +95,19 @@ const handleDirectionToggle = () => {
               class="flex items-center gap-2 px-3 py-2 text-sm cursor-pointer hover:bg-base-200 focus:bg-base-200 outline-none data-[highlighted]:bg-base-200 transition-colors"
             >
               <Icon :icon="detail.icon" :class="[detail.color]" size="18" />
-              <span>{{ detail.label }}</span>
+              <span>{{ getPropertyLabel(detail.value) }}</span>
             </SelectItem>
           </SelectViewport>
         </SelectContent>
       </SelectPortal>
     </SelectRoot>
     <UiButton
-      :aria-label="`Trier par ${currentPropertyDetails.label} (${currentDirectionDetails.label})`"
+      :aria-label="
+        t('tasks.sort.sortByLabel', {
+          property: getPropertyLabel(currentPropertyDetails.value),
+          direction: getDirectionLabel(currentDirectionDetails.value),
+        })
+      "
       @click="handleDirectionToggle"
       :before-icon="currentDirectionDetails.icon"
       variant="secondary"

@@ -9,10 +9,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from 'reka-ui';
+import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
 import TaskItem from '@/components/app/tasks/task-item.vue';
 import type { Task } from '@/types/task';
 import { Icon } from '@iconify/vue';
+
+const { t } = useI18n();
 
 defineProps<{ open: boolean; task?: Task }>();
 defineEmits<{ close: []; confirm: [] }>();
@@ -31,7 +34,7 @@ defineEmits<{ close: []; confirm: [] }>();
           class="bg-base-100 rounded-2xl shadow-lg border-2 border-base-300 p-4 flex flex-col items-center"
         >
           <VisuallyHidden asChild>
-            <DialogTitle>Supprimer cette tâche ?</DialogTitle>
+            <DialogTitle>{{ t('tasks.dialog.deleteTitle') }}</DialogTitle>
           </VisuallyHidden>
           <div v-if="task" class="mb-4 w-full p-2 border-2 border-base-300 rounded-3xl bg-base-200">
             <TaskItem :task="task" :hide-actions="true" :disabled-checkbox="true" />
@@ -40,14 +43,14 @@ defineEmits<{ close: []; confirm: [] }>();
             <div class="flex items-center gap-2">
               <Icon icon="ph:warning-circle" class="w-6 h-6 text-error flex-shrink-0" />
               <DialogDescription class="text-base-content-200 text-sm">
-                Êtes-vous sûr de vouloir supprimer cette tâche ? Cette action est irréversible.
+                {{ t('tasks.dialog.deleteConfirmation') }}
               </DialogDescription>
             </div>
             <div class="flex gap-3">
               <DialogClose as="button">
-                <UiButton text="Annuler" variant="accent" />
+                <UiButton :text="t('common.cancel')" variant="accent" />
               </DialogClose>
-              <UiButton text="Supprimer" variant="ghost" @click="$emit('confirm')" />
+              <UiButton :text="t('common.delete')" variant="ghost" @click="$emit('confirm')" />
             </div>
           </div>
         </div>

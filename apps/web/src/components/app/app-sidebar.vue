@@ -3,6 +3,7 @@ import { ref, useTemplateRef, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import { useTagsStore } from '@/stores/tags';
 import { DEFAULT_TAG_COLOR, getRandomTagColor } from '@/config/tag-colors';
@@ -11,6 +12,7 @@ import AppLogo from './app-logo.vue';
 import Avatar from 'vue-boring-avatars';
 import { Icon } from '@iconify/vue';
 
+const { t } = useI18n();
 const router = useRouter();
 const { logout } = useAuthStore();
 const { isAuthenticated, user } = storeToRefs(useAuthStore());
@@ -118,14 +120,14 @@ watch(
             active-class="bg-base-content-100/5"
           >
             <Icon icon="ph:list-checks-bold" class="w-5 h-5" />
-            <span>Tasks</span>
+            <span>{{ t('nav.tasks') }}</span>
           </RouterLink>
         </div>
 
         <!-- Tags Group -->
         <div class="flex flex-col gap-2">
           <p class="text-xs font-semibold text-base-content/60 px-3 uppercase tracking-wider">
-            Tags
+            {{ t('nav.tags') }}
           </p>
           <div class="flex flex-col">
             <RouterLink
@@ -172,7 +174,7 @@ watch(
                 @keyup.enter="saveNewTag"
                 @keyup.escape="cancelCreatingTag"
                 @blur="saveNewTag"
-                placeholder="nom-du-tag"
+                :placeholder="t('tags.tagNamePlaceholder')"
                 class="flex-1 bg-transparent outline-none min-w-0 placeholder:text-base-content-100/60"
               />
             </div>
@@ -188,7 +190,7 @@ watch(
               >
                 <Icon icon="ph:plus-bold" class="w-3 h-3 text-base-content-100/60" />
               </div>
-              <span class="truncate text-base-content-100/60">Ajouter un tag</span>
+              <span class="truncate text-base-content-100/60">{{ t('tags.addTag') }}</span>
             </button>
           </div>
         </div>
@@ -217,8 +219,8 @@ watch(
       </template>
       <template v-else>
         <div class="flex flex-col gap-2">
-          <UiButton text="Sign In" to="/sign-in" variant="secondary" class="w-full" />
-          <UiButton text="Sign Up" to="/sign-up" variant="accent" class="w-full" />
+          <UiButton :text="t('nav.signIn')" to="/sign-in" variant="secondary" class="w-full" />
+          <UiButton :text="t('nav.signUp')" to="/sign-up" variant="accent" class="w-full" />
         </div>
       </template>
     </div>

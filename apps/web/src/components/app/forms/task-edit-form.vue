@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
 import PrioritySelect from '@/components/app/inputs/priority-select.vue';
 import DatePicker from '@/components/app/inputs/date-picker.vue';
 import HashtagTagInput from '@/components/app/inputs/hashtag-tag-input.vue';
@@ -10,6 +11,8 @@ import { useHashtagTags } from '@/composables/use-hashtag-tags';
 import { createTaskSchema } from '@/schemas';
 import { useTagsStore } from '@/stores/tags';
 import type { UpdateTask, Tag } from '@/types/task';
+
+const { t } = useI18n();
 
 const props = defineProps<{ loading?: boolean; task: UpdateTask & { tags?: Tag[] } }>();
 
@@ -110,7 +113,7 @@ watch(
   >
     <div class="border-b-2 border-base-300">
       <label for="task-title" class="text-sm font-medium text-base-content-100 ml-3 mt-3 block">
-        Titre
+        {{ t('tasks.form.titleLabel') }}
       </label>
 
       <HashtagTagInput
@@ -121,6 +124,7 @@ watch(
         :can-add-more-tags="canAddMoreTags"
         :tag-detection-enabled="tagDetectionEnabled"
         :max-length="50"
+        :placeholder="t('tasks.form.titlePlaceholder')"
         @tag-added="handleTagAdded"
         @tag-selected="handleTagSelected"
         @disable-detection="disableDetection"
@@ -135,26 +139,30 @@ watch(
       />
 
       <div class="flex justify-between items-center px-3 pb-3">
-        <span class="text-xs text-base-content-300">{{ title.length }}/50 caractères</span>
+        <span class="text-xs text-base-content-300">
+          {{ title.length }}/50 {{ t('tasks.form.characters') }}
+        </span>
         <span v-if="hasError('title')" class="text-xs text-error">{{ getError('title') }}</span>
       </div>
     </div>
 
     <div class="flex flex-col">
       <label for="task-description" class="text-sm font-medium text-base-content-100 ml-3 mt-3">
-        Description
+        {{ t('tasks.form.descriptionLabel') }}
       </label>
       <textarea
         v-model="description"
         id="task-description"
-        placeholder="Entrez la description de la tâche"
+        :placeholder="t('tasks.form.descriptionPlaceholder')"
         maxlength="256"
         rows="4"
         autocomplete="off"
         class="py-2 px-3 outline-none resize-none h-24 text-sm"
       ></textarea>
       <div class="flex justify-between items-center px-3 pb-2">
-        <span class="text-xs text-base-content-300"> {{ description.length }}/256 caractères </span>
+        <span class="text-xs text-base-content-300">
+          {{ description.length }}/256 {{ t('tasks.form.characters') }}
+        </span>
         <span v-if="hasError('description')" class="text-xs text-error">
           {{ getError('description') }}
         </span>
@@ -162,7 +170,7 @@ watch(
     </div>
     <div class="flex flex-col gap-3 p-3 bg-base-200/50">
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <DatePicker v-model="deadline" placeholder="Pas d'échéance" />
+        <DatePicker v-model="deadline" :placeholder="t('tasks.form.noDeadline')" />
         <PrioritySelect v-model="priority" />
       </div>
     </div>

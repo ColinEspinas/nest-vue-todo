@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
 import { useFormValidation } from '@/composables/use-form-validation';
 import { loginSchema } from '@/schemas';
 import UiInput from '@/components/ui/ui-input.vue';
 
+const { t } = useI18n();
 const { validate, getError } = useFormValidation(loginSchema);
 
 const email = ref('');
@@ -27,30 +29,30 @@ const handleSubmit = () => {
   >
     <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-4">
       <div class="flex flex-col gap-1">
-        <h2 class="font-bold text-2xl">Se connecter</h2>
+        <h2 class="font-bold text-2xl">{{ t('auth.signIn.title') }}</h2>
 
-        <p>Veuillez entrer vos identifiants pour vous connecter.</p>
+        <p>{{ t('auth.signIn.description') }}</p>
       </div>
       <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
         <UiInput
           v-model="email"
           name="email"
           type="email"
-          label="Adresse e-mail"
-          placeholder="Entrez votre adresse e-mail..."
+          :label="t('auth.signIn.emailLabel')"
+          :placeholder="t('auth.signIn.emailPlaceholder')"
           :error="getError('email')"
         />
         <UiInput
           v-model="password"
           name="password"
           type="password"
-          label="Mot de passe"
-          placeholder="Entrez votre mot de passe..."
+          :label="t('auth.signIn.passwordLabel')"
+          :placeholder="t('auth.signIn.passwordPlaceholder')"
           :error="getError('password')"
         />
         <UiButton
           after-icon="ph:arrow-bend-up-right-bold"
-          text="Se connecter"
+          :text="t('auth.signIn.submitButton')"
           variant="accent"
           class="min-w-max"
           align="center"
@@ -59,8 +61,8 @@ const handleSubmit = () => {
       </form>
 
       <p class="text-sm">
-        <span>Vous n'avez pas de compte ?&nbsp;</span>
-        <RouterLink to="/sign-up" class="text-accent">S'inscrire</RouterLink>
+        <span>{{ t('auth.signIn.noAccount') }}&nbsp;</span>
+        <RouterLink to="/sign-up" class="text-accent">{{ t('auth.signIn.signUpLink') }}</RouterLink>
       </p>
     </div>
   </section>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
 import { useFormValidation } from '@/composables/use-form-validation';
 import { registerSchema } from '@/schemas';
 import UiInput from '@/components/ui/ui-input.vue';
 
+const { t } = useI18n();
 const { validate, getError } = useFormValidation(registerSchema);
 
 const name = ref('');
@@ -28,8 +30,8 @@ const handleSubmit = () => {
   >
     <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-4">
       <div class="flex flex-col gap-1">
-        <h2 class="font-bold text-2xl">S'inscrire</h2>
-        <p>Veuillez entrer vos identifiants pour vous inscrire.</p>
+        <h2 class="font-bold text-2xl">{{ t('auth.signUp.title') }}</h2>
+        <p>{{ t('auth.signUp.description') }}</p>
       </div>
 
       <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
@@ -37,29 +39,29 @@ const handleSubmit = () => {
           v-model="name"
           name="name"
           type="text"
-          label="Nom d'utilisateur"
-          placeholder="Entrez votre nom..."
+          :label="t('auth.signUp.nameLabel')"
+          :placeholder="t('auth.signUp.namePlaceholder')"
           :error="getError('name')"
         />
         <UiInput
           v-model="email"
           name="email"
           type="email"
-          label="Adresse e-mail"
-          placeholder="Entrez votre adresse e-mail..."
+          :label="t('auth.signUp.emailLabel')"
+          :placeholder="t('auth.signUp.emailPlaceholder')"
           :error="getError('email')"
         />
         <UiInput
           v-model="password"
           name="password"
           type="password"
-          label="Mot de passe (min. 8 caractères)"
-          placeholder="Entrez votre mot de passe..."
+          :label="t('auth.signUp.passwordLabel')"
+          :placeholder="t('auth.signUp.passwordPlaceholder')"
           :error="getError('password')"
         />
         <UiButton
           after-icon="ph:arrow-bend-up-right-bold"
-          text="S'inscrire"
+          :text="t('auth.signUp.submitButton')"
           variant="accent"
           class="min-w-max"
           align="center"
@@ -68,8 +70,8 @@ const handleSubmit = () => {
       </form>
 
       <p class="text-sm">
-        <span>Vous avez déjà un compte ?&nbsp;</span>
-        <RouterLink to="/sign-in" class="text-accent">Se connecter</RouterLink>
+        <span>{{ t('auth.signUp.hasAccount') }}&nbsp;</span>
+        <RouterLink to="/sign-in" class="text-accent">{{ t('auth.signUp.signInLink') }}</RouterLink>
       </p>
     </div>
   </section>

@@ -1,0 +1,170 @@
+{
+  "app": {
+    "name": "Checkmate",
+    "landing": {
+      "headline": "Planifiez et accomplissez vos objectifs, simplement.",
+      "subheadline": "Avec Checkmate, pas de tableaux compliqués, simplement vos tâches et vous.",
+      "cta": "Commencer maintenant",
+      "marketingTask": {
+        "title": "S'inscrire sur Checkmate",
+        "description": "Créez un compte pour commencer à organiser mes tâches et atteindre mes objectifs."
+      },
+      "features": {
+        "simple": {
+          "title": "Simple",
+          "description": "Gestion simplifiée des tâches pour une productivité maximale."
+        },
+        "priorities": {
+          "title": "Priorités",
+          "description": "Organisez vos tâches selon leur importance et urgence."
+        },
+        "deadlines": {
+          "title": "Échéances",
+          "description": "Ne manquez jamais une date limite importante."
+        },
+        "openSource": {
+          "title": "Open source",
+          "description": "La transparence avant tout, notre code est ouvert à tous."
+        }
+      }
+    }
+  },
+  "nav": {
+    "tasks": "Tâches",
+    "tags": "Tags",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Se connecter",
+      "description": "Veuillez entrer vos identifiants pour vous connecter.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "Entrez votre adresse e-mail...",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Entrez votre mot de passe...",
+      "submitButton": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUpLink": "S'inscrire"
+    },
+    "signUp": {
+      "title": "S'inscrire",
+      "description": "Veuillez entrer vos identifiants pour vous inscrire.",
+      "nameLabel": "Nom d'utilisateur",
+      "namePlaceholder": "Entrez votre nom...",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "Entrez votre adresse e-mail...",
+      "passwordLabel": "Mot de passe (min. 8 caractères)",
+      "passwordPlaceholder": "Entrez votre mot de passe...",
+      "submitButton": "S'inscrire",
+      "hasAccount": "Vous avez déjà un compte ?",
+      "signInLink": "Se connecter"
+    }
+  },
+  "tasks": {
+    "form": {
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Entrez le titre de la tâche (utilisez #tag pour ajouter des tags)",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Entrez la description de la tâche",
+      "characters": "caractères",
+      "noDeadline": "Pas d'échéance",
+      "selectDate": "Sélectionner une date",
+      "clearDate": "Effacer",
+      "today": "Aujourd'hui",
+      "addButton": "Ajouter aux tâches"
+    },
+    "actions": {
+      "edit": "Modifier la tâche",
+      "delete": "Supprimer la tâche"
+    },
+    "priority": {
+      "selectLabel": "Sélectionner la priorité",
+      "high": "Haute",
+      "medium": "Moyenne",
+      "low": "Basse",
+      "tooltip": {
+        "high": "Priorité haute - À traiter en premier, même si l'échéance est lointaine",
+        "medium": "Priorité normale - À traiter selon l'ordre des échéances",
+        "low": "Priorité basse - À traiter quand le temps le permet"
+      }
+    },
+    "sort": {
+      "selectLabel": "Sélectionner la propriété de tri",
+      "sortByLabel": "Trier par {property} ({direction})",
+      "property": {
+        "created": "Création",
+        "deadline": "Échéance",
+        "priority": "Priorité"
+      },
+      "direction": {
+        "asc": "Ascendant",
+        "desc": "Descendant"
+      }
+    },
+    "dialog": {
+      "deleteTitle": "Supprimer cette tâche ?",
+      "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer cette tâche ? Cette action est irréversible.",
+      "editTitle": "Modifier cette tâche ?",
+      "editConfirmation": "Souhaitez-vous appliquer ces modifications à la tâche ? Cette action est irréversible."
+    },
+    "stats": {
+      "total": "Total des tâches",
+      "completed": "Terminées",
+      "pending": "En cours"
+    },
+    "empty": {
+      "title": "Aucune tâche pour le moment",
+      "description": "Commencez par créer une tâche."
+    },
+    "time": {
+      "justNow": "À l'instant",
+      "minutesAgo": "Il y a {minutes} min",
+      "hoursAgo": "Il y a {hours}h",
+      "daysAgo": "Il y a {days}j",
+      "createdOn": "Créée le {date} à {time}",
+      "editedOn": "Éditée le {date} à {time}",
+      "deadlineOverdue": "Échéance dépassée le {date} à {time}",
+      "deadlineScheduled": "Échéance prévue le {date} à {time}"
+    }
+  },
+  "tags": {
+    "addTag": "Ajouter un tag",
+    "tagNamePlaceholder": "nom-du-tag",
+    "dialog": {
+      "deleteTitle": "Supprimer ce tag ?",
+      "deleteWarning": "Ce tag sera retiré de toutes les tâches associées :",
+      "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce tag ? Cette action est irréversible."
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "update": "Modifier"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Adresse email invalide."
+    },
+    "password": {
+      "required": "Le mot de passe est requis.",
+      "minLength": "Le mot de passe doit contenir au moins 8 caractères."
+    },
+    "name": {
+      "required": "Le nom est requis."
+    },
+    "title": {
+      "required": "Le titre est requis.",
+      "maxLength": "Le titre ne peut pas dépasser 50 caractères."
+    },
+    "description": {
+      "required": "La description est requise.",
+      "maxLength": "La description ne peut pas dépasser 256 caractères."
+    }
+  }
+}

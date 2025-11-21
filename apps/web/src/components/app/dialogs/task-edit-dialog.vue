@@ -9,11 +9,14 @@ import {
   DialogTitle,
   DialogDescription,
 } from 'reka-ui';
+import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
 import type { Task, UpdateTask } from '@/types/task';
 import TaskEditForm from '../forms/task-edit-form.vue';
 import { Icon } from '@iconify/vue';
 import { ref, useTemplateRef, watch } from 'vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{ open: boolean; task: Task }>();
 const emit = defineEmits<{
@@ -66,7 +69,7 @@ const handleTaskUpdate = (
           class="bg-base-100 rounded-2xl shadow-lg border-2 border-base-300 p-4 flex flex-col items-center"
         >
           <VisuallyHidden asChild>
-            <DialogTitle>Supprimer cette tâche ?</DialogTitle>
+            <DialogTitle>{{ t('tasks.dialog.editTitle') }}</DialogTitle>
           </VisuallyHidden>
           <div v-if="task" class="mb-4 w-full p-2 border-2 border-base-300 rounded-3xl bg-base-200">
             <TaskEditForm ref="editForm" :task="updatedTask" @submit="handleTaskUpdate" />
@@ -75,15 +78,18 @@ const handleTaskUpdate = (
             <div class="flex items-center gap-2">
               <Icon icon="ph:warning-circle" class="w-6 h-6 text-error flex-shrink-0" />
               <DialogDescription class="text-base-content-200 text-sm">
-                Souhaitez-vous appliquer ces modifications à la tâche ? Cette action est
-                irréversible.
+                {{ t('tasks.dialog.editConfirmation') }}
               </DialogDescription>
             </div>
             <div class="flex gap-3">
               <DialogClose as="button">
-                <UiButton text="Annuler" variant="accent" />
+                <UiButton :text="t('common.cancel')" variant="accent" />
               </DialogClose>
-              <UiButton text="Modifier" variant="ghost" @click="editForm?.handleSubmit()" />
+              <UiButton
+                :text="t('common.update')"
+                variant="ghost"
+                @click="editForm?.handleSubmit()"
+              />
             </div>
           </div>
         </div>

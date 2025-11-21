@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import UiButton from '../ui/ui-button.vue';
 import AppLogo from './app-logo.vue';
+import LanguageSwitcher from './language-switcher.vue';
 import Avatar from 'vue-boring-avatars';
 
+const { t } = useI18n();
 const router = useRouter();
 const { logout } = useAuthStore();
 const { isAuthenticated, user } = storeToRefs(useAuthStore());
@@ -42,13 +45,14 @@ const logoutHandler = () => {
           @click="logoutHandler"
           variant="secondary"
           before-icon="ph:sign-out-bold"
-          aria-label="Se déconnecter"
+          :aria-label="t('nav.signOut')"
         />
       </template>
       <template v-else>
-        <UiButton text="Se connecter" to="/sign-in" variant="secondary" />
-        <UiButton text="S'inscrire" to="/sign-up" variant="accent" />
+        <UiButton :text="t('nav.signIn')" to="/sign-in" variant="secondary" />
+        <UiButton :text="t('nav.signUp')" to="/sign-up" variant="accent" />
       </template>
+      <LanguageSwitcher />
     </div>
   </header>
 </template>

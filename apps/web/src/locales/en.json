@@ -1,0 +1,170 @@
+{
+  "app": {
+    "name": "Checkmate",
+    "landing": {
+      "headline": "Plan and achieve your goals, simply.",
+      "subheadline": "With Checkmate, no complicated boards, just your tasks and you.",
+      "cta": "Get Started Now",
+      "marketingTask": {
+        "title": "Sign up for Checkmate",
+        "description": "Create an account to start organizing my tasks and achieving my goals."
+      },
+      "features": {
+        "simple": {
+          "title": "Simple",
+          "description": "Simplified task management for maximum productivity."
+        },
+        "priorities": {
+          "title": "Priorities",
+          "description": "Organize your tasks by importance and urgency."
+        },
+        "deadlines": {
+          "title": "Deadlines",
+          "description": "Never miss an important deadline."
+        },
+        "openSource": {
+          "title": "Open Source",
+          "description": "Transparency above all, our code is open to everyone."
+        }
+      }
+    }
+  },
+  "nav": {
+    "tasks": "Tasks",
+    "tags": "Tags",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "description": "Please enter your credentials to sign in.",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your email address...",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password...",
+      "submitButton": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign Up"
+    },
+    "signUp": {
+      "title": "Sign Up",
+      "description": "Please enter your credentials to sign up.",
+      "nameLabel": "Username",
+      "namePlaceholder": "Enter your name...",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your email address...",
+      "passwordLabel": "Password (min. 8 characters)",
+      "passwordPlaceholder": "Enter your password...",
+      "submitButton": "Sign Up",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign In"
+    }
+  },
+  "tasks": {
+    "form": {
+      "titleLabel": "Title",
+      "titlePlaceholder": "Enter task title (use #tag to add tags)",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Enter task description",
+      "characters": "characters",
+      "noDeadline": "No deadline",
+      "selectDate": "Select a date",
+      "clearDate": "Clear",
+      "today": "Today",
+      "addButton": "Add to Tasks"
+    },
+    "actions": {
+      "edit": "Edit task",
+      "delete": "Delete task"
+    },
+    "priority": {
+      "selectLabel": "Select priority",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "tooltip": {
+        "high": "High priority - Handle first, even if the deadline is far away",
+        "medium": "Medium priority - Handle according to the order of deadlines",
+        "low": "Low priority - Handle when time allows"
+      }
+    },
+    "sort": {
+      "selectLabel": "Select sort property",
+      "sortByLabel": "Sort by {property} ({direction})",
+      "property": {
+        "created": "Creation",
+        "deadline": "Deadline",
+        "priority": "Priority"
+      },
+      "direction": {
+        "asc": "Ascending",
+        "desc": "Descending"
+      }
+    },
+    "dialog": {
+      "deleteTitle": "Delete this task?",
+      "deleteConfirmation": "Are you sure you want to delete this task? This action is irreversible.",
+      "editTitle": "Edit this task?",
+      "editConfirmation": "Do you want to apply these changes to the task? This action is irreversible."
+    },
+    "stats": {
+      "total": "Total Tasks",
+      "completed": "Completed",
+      "pending": "In Progress"
+    },
+    "empty": {
+      "title": "No tasks yet",
+      "description": "Start by creating a task."
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{minutes} min ago",
+      "hoursAgo": "{hours}h ago",
+      "daysAgo": "{days}d ago",
+      "createdOn": "Created on {date} at {time}",
+      "editedOn": "Edited on {date} at {time}",
+      "deadlineOverdue": "Deadline overdue on {date} at {time}",
+      "deadlineScheduled": "Deadline scheduled for {date} at {time}"
+    }
+  },
+  "tags": {
+    "addTag": "Add Tag",
+    "tagNamePlaceholder": "tag-name",
+    "dialog": {
+      "deleteTitle": "Delete this tag?",
+      "deleteWarning": "This tag will be removed from all associated tasks:",
+      "deleteConfirmation": "Are you sure you want to delete this tag? This action is irreversible."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "update": "Update"
+  },
+  "validation": {
+    "email": {
+      "invalid": "Invalid email address."
+    },
+    "password": {
+      "required": "Password is required.",
+      "minLength": "Password must be at least 8 characters."
+    },
+    "name": {
+      "required": "Name is required."
+    },
+    "title": {
+      "required": "Title is required.",
+      "maxLength": "Title cannot exceed 50 characters."
+    },
+    "description": {
+      "required": "Description is required.",
+      "maxLength": "Description cannot exceed 256 characters."
+    }
+  }
+}
