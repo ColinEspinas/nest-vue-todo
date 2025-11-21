@@ -6,6 +6,7 @@ import { useFormValidation } from '@/composables/use-form-validation';
 import { updateProfileSchema } from '@/schemas';
 import UiButton from '@/components/ui/ui-button.vue';
 import UiInput from '@/components/ui/ui-input.vue';
+import LanguageSwitcher from '@/components/app/language-switcher.vue';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -79,15 +80,12 @@ const handleSubmit = async () => {
           :placeholder="t('settings.profile.emailPlaceholder')"
           :error="getError('email')"
         />
-
         <div v-if="successMessage" class="text-success text-sm p-2 bg-success/10 rounded-lg">
           {{ successMessage }}
         </div>
-
         <div v-if="errorMessage" class="text-error text-sm p-2 bg-error/10 rounded-lg">
           {{ errorMessage }}
         </div>
-
         <UiButton
           after-icon="ph:floppy-disk-bold"
           :text="t('settings.profile.saveButton')"
@@ -98,6 +96,11 @@ const handleSubmit = async () => {
           :disabled="loading"
         />
       </form>
+    </div>
+    <!-- Language Preference Container -->
+    <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-2 mt-4">
+      <h2 class="font-bold text-xl">{{ t('settings.language.label') }}</h2>
+      <LanguageSwitcher />
     </div>
   </section>
 </template>

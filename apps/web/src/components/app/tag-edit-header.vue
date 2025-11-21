@@ -15,7 +15,6 @@ const emit = defineEmits<{
   delete: [];
 }>();
 
-
 const tagNameMaxLength = 32;
 const isEditingTagName = ref(false);
 const tagNameRef = useTemplateRef<HTMLElement>('tagNameRef');

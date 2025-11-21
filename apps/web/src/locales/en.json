@@ -152,6 +152,9 @@
       "saveButton": "Save Changes",
       "successMessage": "Profile updated successfully!",
       "errorMessage": "Failed to update profile. Please try again."
+    },
+    "language": {
+      "label": "Language preference"
     }
   },
   "common": {

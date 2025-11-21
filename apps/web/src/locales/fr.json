@@ -152,6 +152,9 @@
       "saveButton": "Enregistrer les modifications",
       "successMessage": "Profil mis à jour avec succès !",
       "errorMessage": "Échec de la mise à jour du profil. Veuillez réessayer."
+    },
+    "language": {
+      "label": "Préférence de langue"
     }
   },
   "common": {
