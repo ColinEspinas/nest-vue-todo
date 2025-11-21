@@ -3,8 +3,8 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import UiButton from '../ui/ui-button.vue';
+import AppLogo from './app-logo.vue';
 import Avatar from 'vue-boring-avatars';
-import { Icon } from '@iconify/vue';
 
 const router = useRouter();
 const { logout } = useAuthStore();
@@ -18,9 +18,11 @@ const logoutHandler = () => {
 
 <template>
   <header
-    class="flex justify-between items-center bg-base-200/50 border-2 border-base-300 p-2 rounded-2xl"
+    class="flex justify-between items-stretch bg-base-200/50 border-2 border-base-300 rounded-2xl overflow-hidden"
   >
-    <div class="flex gap-2 items-center">
+    <div
+      class="flex gap-2 items-center bg-base-100 px-4 py-2 border-r-2 border-base-content-100/10"
+    >
       <template v-if="isAuthenticated && user">
         <Avatar :name="user?.email || 'User'" :size="36" variant="marble" />
         <div>
@@ -29,13 +31,12 @@ const logoutHandler = () => {
         </div>
       </template>
       <template v-else>
-        <RouterLink to="/" class="flex items-center gap-2 font-medium ml-1">
-          <Icon icon="ph:checks-bold" class="w-5 h-5 text-base-content-100 ml-1" />
-          <p>Checkmate</p>
+        <RouterLink to="/" class="flex items-center gap-2 font-medium">
+          <AppLogo variant="md" />
         </RouterLink>
       </template>
     </div>
-    <div class="flex gap-2">
+    <div class="flex gap-2 p-2">
       <template v-if="isAuthenticated">
         <UiButton
           @click="logoutHandler"

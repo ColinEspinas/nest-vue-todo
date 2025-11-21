@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useTagsStore } from '@/stores/tags';
 import { DEFAULT_TAG_COLOR, getRandomTagColor } from '@/config/tag-colors';
 import UiButton from '../ui/ui-button.vue';
+import AppLogo from './app-logo.vue';
 import Avatar from 'vue-boring-avatars';
 import { Icon } from '@iconify/vue';
 
@@ -103,10 +104,7 @@ watch(
     <div
       class="flex items-center justify-center gap-2 font-medium p-4 bg-base-100 border-b-2 border-base-content-100/10 flex-shrink-0"
     >
-      <div class="flex items-center justify-center p-1 rounded-lg bg-accent/20">
-        <Icon icon="ph:checks-bold" class="w-4 h-4 text-accent" />
-      </div>
-      <p class="text-lg font-bold">Checkmate</p>
+      <AppLogo variant="md" />
     </div>
 
     <!-- Scrollable Navigation -->
