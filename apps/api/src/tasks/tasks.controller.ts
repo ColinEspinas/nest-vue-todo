@@ -34,6 +34,7 @@ export class TasksController {
       query.limit,
       query.offset,
       query.order,
+      query.tagId,
     );
   }
 

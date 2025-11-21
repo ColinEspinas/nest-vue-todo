@@ -14,8 +14,9 @@ export class TasksService {
     limit?: number,
     offset?: number,
     order?: Order,
+    tagId?: string,
   ): Promise<Task[]> {
-    return await this.tasksRepository.findAllByUserId(userId, limit, offset, order);
+    return await this.tasksRepository.findAllByUserId(userId, limit, offset, order, tagId);
   }
 
   async findById(id: string, userId: string): Promise<Task> {

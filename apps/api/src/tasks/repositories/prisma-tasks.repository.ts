@@ -18,9 +18,19 @@ export class PrismaTasksRepository extends TasksRepository {
     limit?: number,
     offset?: number,
     order?: Order,
+    tagId?: string,
   ): Promise<Task[]> {
     const tasks = await this.prisma.task.findMany({
-      where: { userId },
+      where: {
+        userId,
+        ...(tagId && {
+          tags: {
+            some: {
+              id: tagId,
+            },
+          },
+        }),
+      },
       orderBy: orderToPrisma(order),
       take: limit,
       skip: offset,

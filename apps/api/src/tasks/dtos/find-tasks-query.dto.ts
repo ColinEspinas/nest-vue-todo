@@ -1,4 +1,4 @@
-import { IsInt, Max, Min, IsOptional, IsIn } from 'class-validator';
+import { IsInt, Max, Min, IsOptional, IsIn, IsString } from 'class-validator';
 
 import { OrderValues } from '../types/order.type';
 import type { Order } from '../types/order.type';
@@ -21,4 +21,8 @@ export class FindTasksQueryDto {
   @IsOptional()
   @IsIn(OrderValues)
   order?: Order = 'created_desc';
+
+  @IsOptional()
+  @IsString()
+  tagId?: string;
 }

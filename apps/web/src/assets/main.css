@@ -21,6 +21,8 @@
     color: var(--color-base-content-100);
     font-family: var(--font-sans);
     min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
   }
 
   #app {

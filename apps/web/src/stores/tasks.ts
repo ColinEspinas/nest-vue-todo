@@ -29,7 +29,12 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   };
 
-  const fetchTasks = async (options?: { limit?: number; offset?: number; order?: Order }) => {
+  const fetchTasks = async (options?: {
+    limit?: number;
+    offset?: number;
+    order?: Order;
+    tagId?: string;
+  }) => {
     loading.value = true;
     error.value = null;
 

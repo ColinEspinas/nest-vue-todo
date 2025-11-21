@@ -25,10 +25,22 @@ const router = createRouter({
           component: () => import('../views/auth/sign-up-view.vue'),
           meta: { guestOnly: true },
         },
+      ],
+    },
+    {
+      path: '/',
+      component: () => import('../layouts/sidebar-layout.vue'),
+      children: [
         {
           path: '/tasks',
           name: 'tasks',
           component: () => import('../views/tasks-view.vue'),
+          meta: { authOnly: true },
+        },
+        {
+          path: '/tags/:tagId',
+          name: 'tag-tasks',
+          component: () => import('../views/tag-tasks-view.vue'),
           meta: { authOnly: true },
         },
       ],

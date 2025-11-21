@@ -9,11 +9,17 @@ export const useTasksApi = () => {
     deadline: task.deadline && new Date(task.deadline),
   });
 
-  const getTasks = async (options?: { limit?: number; offset?: number; order?: Order }) => {
+  const getTasks = async (options?: {
+    limit?: number;
+    offset?: number;
+    order?: Order;
+    tagId?: string;
+  }) => {
     const params = new URLSearchParams();
     if (options?.limit !== undefined) params.append('limit', String(options.limit));
     if (options?.offset !== undefined) params.append('offset', String(options.offset));
     if (options?.order !== undefined) params.append('order', options.order);
+    if (options?.tagId !== undefined) params.append('tagId', options.tagId);
     const url = params.toString() ? `/tasks?${params}` : '/tasks';
     const response = await useApi(url).json<Task[]>();
     response.data.value = response.data.value?.map(parseTaskDates) || [];
