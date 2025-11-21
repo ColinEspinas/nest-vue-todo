@@ -42,6 +42,12 @@ const logoutHandler = () => {
     <div class="flex gap-2 p-2">
       <template v-if="isAuthenticated">
         <UiButton
+          to="/settings"
+          variant="secondary"
+          before-icon="ph:gear-bold"
+          :aria-label="t('nav.settings')"
+        />
+        <UiButton
           @click="logoutHandler"
           variant="secondary"
           before-icon="ph:sign-out-bold"

@@ -43,6 +43,12 @@ const router = createRouter({
           component: () => import('../views/tag-tasks-view.vue'),
           meta: { authOnly: true },
         },
+        {
+          path: '/settings',
+          name: 'settings',
+          component: () => import('../views/settings-view.vue'),
+          meta: { authOnly: true },
+        },
       ],
     },
   ],

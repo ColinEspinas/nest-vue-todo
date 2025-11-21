@@ -21,3 +21,8 @@ export const createTaskSchema = z.object({
   priority: z.enum(['high', 'medium', 'low']),
   deadline: z.date().optional().nullable(),
 });
+
+export const updateProfileSchema = z.object({
+  name: z.string().min(1, 'validation.name.required'),
+  email: z.string().email('validation.email.invalid'),
+});

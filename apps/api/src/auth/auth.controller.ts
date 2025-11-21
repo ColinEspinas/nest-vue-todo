@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -12,6 +13,7 @@ import {
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { NewUserDTO } from '../users/dtos/new-user.dto';
+import { UpdateUserDTO } from '../users/dtos/update-user.dto';
 import { LoginDto } from './dtos/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PayloadUser } from './types/payload-user.type';
@@ -35,5 +37,14 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   me(@Req() request: Request & { user: PayloadUser }) {
     return this.authService.getUser(request.user);
+  }
+
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(
+    @Req() request: Request & { user: PayloadUser },
+    @Body(ValidationPipe) body: UpdateUserDTO,
+  ) {
+    return this.authService.updateUser(request.user, body);
   }
 }

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
-import { useAuthApi } from '@/composables/api/use-auth-api';
+import { useAuthApi, type UpdateUser } from '@/composables/api/use-auth-api';
 import type { EnrichedUser, NewUser } from '@/types/user';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -64,6 +64,26 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = false;
   };
 
+  const updateProfile = async (updateData: UpdateUser) => {
+    loading.value = true;
+    try {
+      const { data, error } = await api.updateCurrentUser(updateData);
+
+      if (error.value) {
+        if (error.value === 'Conflict') {
+          throw new Error('Un utilisateur avec cet e-mail existe déjà.');
+        }
+        throw new Error('Une erreur est survenue lors de la mise à jour du profil.');
+      }
+
+      user.value = data.value ?? null;
+      totalTasksStat.value = user.value?.totalTasks || 0;
+      completedTasksStat.value = user.value?.completedTasks || 0;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return {
     token,
     user,
@@ -76,5 +96,6 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     logout,
     restore,
+    updateProfile,
   };
 });

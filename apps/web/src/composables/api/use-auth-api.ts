@@ -1,6 +1,11 @@
 import type { EnrichedUser, NewUser, User } from '@/types/user';
 import { useApi } from './use-api';
 
+export type UpdateUser = {
+  name?: string;
+  email?: string;
+};
+
 export const useAuthApi = () => {
   const login = async (email: string, password: string) => {
     return useApi('/auth/login', {
@@ -20,9 +25,17 @@ export const useAuthApi = () => {
     return useApi('/auth/me').json<EnrichedUser>();
   };
 
+  const updateCurrentUser = async (updateUser: UpdateUser) => {
+    return useApi('/auth/me', {
+      method: 'PATCH',
+      body: JSON.stringify(updateUser),
+    }).json<EnrichedUser>();
+  };
+
   return {
     login,
     register,
     getCurrentUser,
+    updateCurrentUser,
   };
 };

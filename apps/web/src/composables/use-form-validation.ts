@@ -36,10 +36,15 @@ export function useFormValidation<T extends z.ZodSchema>(schema: T) {
     return Boolean(errors.value[field]);
   };
 
+  const resetErrors = () => {
+    errors.value = {};
+  };
+
   return {
     errors,
     validate,
     getError,
     hasError,
+    resetErrors,
   };
 }

@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
 import { NewUserDTO } from '../users/dtos/new-user.dto';
+import { UpdateUserDTO } from '../users/dtos/update-user.dto';
 import { DuplicateUserError } from '../users/errors/duplicate-user.error';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadUser } from './types/payload-user.type';
@@ -71,6 +72,34 @@ export class AuthService {
       throw new NotFoundException('Enriched user data not found');
     }
     return enrichedUser;
+  }
+
+  async updateUser(user: PayloadUser, updateData: UpdateUserDTO): Promise<EnrichedUser> {
+    try {
+      const foundUser = await this.usersService.findByEmail(user.email);
+      if (!foundUser) {
+        throw new NotFoundException('User not found');
+      }
+
+      await this.usersService.update(foundUser.id, updateData);
+
+      const updatedUser = await this.usersService.findById(foundUser.id);
+      if (!updatedUser) {
+        throw new NotFoundException('Updated user not found');
+      }
+
+      const enrichedUser = await this.usersService.enrichUser(updatedUser);
+      if (!enrichedUser) {
+        throw new NotFoundException('Enriched user data not found');
+      }
+
+      return enrichedUser;
+    } catch (error) {
+      if (error instanceof DuplicateUserError) {
+        throw new ConflictException(error.message);
+      }
+      throw error;
+    }
   }
 
   private hashPassword(password: string): Promise<string> {

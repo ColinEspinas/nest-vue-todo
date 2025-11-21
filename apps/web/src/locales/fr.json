@@ -32,6 +32,7 @@
   "nav": {
     "tasks": "Tâches",
     "tags": "Tags",
+    "settings": "Paramètres",
     "signIn": "Se connecter",
     "signUp": "S'inscrire",
     "signOut": "Se déconnecter"
@@ -136,6 +137,21 @@
       "deleteTitle": "Supprimer ce tag ?",
       "deleteWarning": "Ce tag sera retiré de toutes les tâches associées :",
       "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce tag ? Cette action est irréversible."
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Gérez les préférences de votre compte",
+    "profile": {
+      "title": "Profil",
+      "description": "Mettez à jour vos informations de profil",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Entrez votre nom...",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "Entrez votre adresse e-mail...",
+      "saveButton": "Enregistrer les modifications",
+      "successMessage": "Profil mis à jour avec succès !",
+      "errorMessage": "Échec de la mise à jour du profil. Veuillez réessayer."
     }
   },
   "common": {

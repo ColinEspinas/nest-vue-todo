@@ -197,6 +197,18 @@ watch(
       </nav>
     </div>
 
+    <!-- Settings Section -->
+    <div v-if="isAuthenticated" class="flex flex-col gap-1 px-2 py-3 flex-shrink-0">
+      <RouterLink
+        to="/settings"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-base-content/60 hover:text-base-content hover:bg-base-content-100/5 text-base-content-100/60"
+        active-class="!text-base-content bg-base-content-100/5"
+      >
+        <Icon icon="ph:gear-bold" class="w-5 h-5" />
+        <span>{{ t('nav.settings') }}</span>
+      </RouterLink>
+    </div>
+
     <!-- User Profile / Auth Section -->
     <div
       class="flex flex-col gap-3 p-4 bg-base-100 border-t-2 border-base-content-100/10 flex-shrink-0"
