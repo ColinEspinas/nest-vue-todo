@@ -228,9 +228,6 @@ const closeTagDeleteDialog = () => {
           @delete="handleDeleteTask"
           @edit="handleEditTask"
         />
-        <div v-if="!loading && totalTasks === 0" class="text-center py-8 text-base-content/60">
-          Aucune tâche avec ce tag pour le moment
-        </div>
       </section>
 
       <UiPagination
