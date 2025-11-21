@@ -16,15 +16,19 @@ import { Icon } from '@iconify/vue';
 import { ref, useTemplateRef, watch } from 'vue';
 
 const props = defineProps<{ open: boolean; task: Task }>();
-const emit = defineEmits<{ close: []; confirm: [task: UpdateTask] }>();
+const emit = defineEmits<{
+  close: [];
+  confirm: [task: UpdateTask, tagsToCreate: Array<{ name: string; color?: string }>];
+}>();
 
 const editForm = useTemplateRef('editForm');
 
-const updatedTask = ref<UpdateTask>({
+const updatedTask = ref<UpdateTask & { tags?: typeof props.task.tags }>({
   title: props.task.title,
   description: props.task.description,
   priority: props.task.priority,
   deadline: props.task.deadline,
+  tags: props.task.tags,
 });
 
 watch(
@@ -35,14 +39,17 @@ watch(
       description: newTask.description,
       priority: newTask.priority,
       deadline: newTask.deadline,
+      tags: newTask.tags,
     };
   },
   { immediate: true },
 );
 
-const handleTaskUpdate = (task: UpdateTask) => {
-  updatedTask.value = task;
-  emit('confirm', task);
+const handleTaskUpdate = (
+  task: UpdateTask,
+  tagsToCreate: Array<{ name: string; color?: string }>,
+) => {
+  emit('confirm', task, tagsToCreate);
 };
 </script>
 

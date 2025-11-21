@@ -185,6 +185,7 @@ function handleSelect(ev: CustomEvent) {
     <ComboboxInput
       ref="inputRef"
       v-model="modelValue"
+      :display-value="() => modelValue"
       type="text"
       :placeholder="placeholder"
       :maxlength="maxLength"

@@ -126,9 +126,20 @@ const handleEditTask = (taskId: string) => {
   taskToEditId.value = taskId;
 };
 
-const confirmEditTask = async (updatedTask: UpdateTask) => {
+const confirmEditTask = async (
+  updatedTask: UpdateTask,
+  tagsToCreate: Array<{ name: string; color?: string }>,
+) => {
   if (taskToEditId.value) {
     try {
+      // Create new tags if any and add their IDs to the task
+      if (tagsToCreate.length > 0) {
+        const newTags = await tagsStore.createTags(tagsToCreate);
+        if (!updatedTask.tagIds) {
+          updatedTask.tagIds = [];
+        }
+        updatedTask.tagIds.push(...newTags.map((tag) => tag.id));
+      }
       await tasksStore.updateTask(taskToEditId.value, updatedTask);
     } catch (error) {
       console.error('Failed to edit task:', error);

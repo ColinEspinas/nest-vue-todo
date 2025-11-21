@@ -13,12 +13,19 @@ export interface HashtagTagsOptions {
   availableTags: MaybeRefOrGetter<Tag[]>;
   maxTags?: number;
   maxTagLength?: number;
+  initialTags?: Tag[];
 }
 
 export function useHashtagTags(options: HashtagTagsOptions) {
-  const { availableTags, maxTags = 3, maxTagLength = 25 } = options;
+  const { availableTags, maxTags = 3, maxTagLength = 25, initialTags = [] } = options;
 
-  const extractedTags = ref<ExtractedTag[]>([]);
+  const extractedTags = ref<ExtractedTag[]>(
+    initialTags.map((tag) => ({
+      name: tag.name,
+      color: tag.color || undefined,
+      isNew: false,
+    })),
+  );
   const tagDetectionEnabled = ref(true);
 
   const selectedTagIds = computed(() => {

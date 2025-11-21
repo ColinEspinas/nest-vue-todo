@@ -19,6 +19,10 @@ export const useTagsStore = defineStore('tags', () => {
     }
   };
 
+  const sortTags = () => {
+    tags.value.sort((a, b) => a.name.localeCompare(b.name));
+  };
+
   const fetchTags = async () => {
     loading.value = true;
     error.value = null;
@@ -31,6 +35,7 @@ export const useTagsStore = defineStore('tags', () => {
     }
 
     tags.value = data.value || [];
+    sortTags();
     loading.value = false;
   };
 
@@ -45,6 +50,7 @@ export const useTagsStore = defineStore('tags', () => {
 
     if (data.value) {
       tags.value.push(data.value);
+      sortTags();
     }
 
     return data.value;
@@ -61,6 +67,7 @@ export const useTagsStore = defineStore('tags', () => {
 
     if (data.value) {
       tags.value.push(...data.value);
+      sortTags();
       return data.value;
     }
 
@@ -82,6 +89,11 @@ export const useTagsStore = defineStore('tags', () => {
         replaceTag(originalTag);
       }
       return;
+    }
+
+    // Re-sort if name was updated
+    if (tag.name) {
+      sortTags();
     }
 
     return data.value;

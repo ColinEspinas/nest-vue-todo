@@ -98,6 +98,12 @@ export const useTasksStore = defineStore('tasks', () => {
       }
       return;
     }
+
+    // Update with the full task data from the API (includes populated tags)
+    if (data.value) {
+      replaceTask(data.value);
+    }
+
     return data.value;
   };
 

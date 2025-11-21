@@ -9,10 +9,12 @@ import ErrorMessage from '@/components/app/error-message.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';
 import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';
+import TaskStats from '@/components/app/tasks/task-stats.vue';
 import UiPagination from '@/components/ui/ui-pagination.vue';
 import OrderSelect from '@/components/app/inputs/order-select.vue';
 import TaskEditDialog from '@/components/app/dialogs/task-edit-dialog.vue';
-import TagChip from '@/components/app/chips/tag-chip.vue';
+import TagDeleteDialog from '@/components/app/dialogs/tag-delete-dialog.vue';
+import TagHeader from '@/components/app/tag-edit-header.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -112,9 +114,20 @@ const handleEditTask = (taskId: string) => {
   taskToEditId.value = taskId;
 };
 
-const confirmEditTask = async (updatedTask: UpdateTask) => {
+const confirmEditTask = async (
+  updatedTask: UpdateTask,
+  tagsToCreate: Array<{ name: string; color?: string }>,
+) => {
   if (taskToEditId.value) {
     try {
+      // Create new tags if any and add their IDs to the task
+      if (tagsToCreate.length > 0) {
+        const newTags = await tagsStore.createTags(tagsToCreate);
+        if (!updatedTask.tagIds) {
+          updatedTask.tagIds = [];
+        }
+        updatedTask.tagIds.push(...newTags.map((tag) => tag.id));
+      }
       await tasksStore.updateTask(taskToEditId.value, updatedTask);
     } catch (error) {
       console.error('Failed to edit task:', error);
@@ -135,6 +148,51 @@ const closeEditDialog = () => {
   showEditDialog.value = false;
   taskToEditId.value = null;
 };
+
+// Tag controls
+const showTagDeleteDialog = ref(false);
+
+const updateTagName = async (name: string) => {
+  if (tag.value) {
+    try {
+      await tagsStore.updateTag(tag.value.id, { name });
+      await fetchTasks();
+    } catch (error) {
+      console.error('Failed to update tag name:', error);
+    }
+  }
+};
+
+const updateTagColor = async (color: string) => {
+  if (tag.value) {
+    try {
+      await tagsStore.updateTag(tag.value.id, { color });
+      await fetchTasks();
+    } catch (error) {
+      console.error('Failed to update tag color:', error);
+    }
+  }
+};
+
+const handleDeleteTag = () => {
+  showTagDeleteDialog.value = true;
+};
+
+const confirmDeleteTag = async () => {
+  if (tag.value) {
+    try {
+      await tagsStore.deleteTag(tag.value.id);
+      showTagDeleteDialog.value = false;
+      router.push('/');
+    } catch (error) {
+      console.error('Failed to delete tag:', error);
+    }
+  }
+};
+
+const closeTagDeleteDialog = () => {
+  showTagDeleteDialog.value = false;
+};
 </script>
 
 <template>
@@ -142,21 +200,18 @@ const closeEditDialog = () => {
     <ErrorMessage v-if="error" :error="error" />
 
     <div v-if="tag" class="bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10">
+      <!-- Tag Header -->
       <section class="mb-4">
-        <div class="grid grid-cols-3 gap-4">
-          <div class="bg-base-100 p-4 rounded-2xl border-2 border-base-300">
-            <p class="text-sm text-base-content/70 mb-1">Total</p>
-            <p class="text-2xl font-bold">{{ totalTasks }}</p>
-          </div>
-          <div class="bg-base-100 p-4 rounded-2xl border-2 border-base-300">
-            <p class="text-sm text-base-content/70 mb-1">Completed</p>
-            <p class="text-2xl font-bold text-success">{{ completedTasks }}</p>
-          </div>
-          <div class="bg-base-100 p-4 rounded-2xl border-2 border-base-300">
-            <p class="text-sm text-base-content/70 mb-1">Pending</p>
-            <p class="text-2xl font-bold text-warning">{{ pendingTasks }}</p>
-          </div>
-        </div>
+        <TagHeader
+          :tag="tag"
+          @update-name="updateTagName"
+          @update-color="updateTagColor"
+          @delete="handleDeleteTag"
+        />
+      </section>
+
+      <section class="mb-4">
+        <TaskStats :total="totalTasks" :completed="completedTasks" :pending="pendingTasks" />
       </section>
 
       <section v-if="totalTasks > 0" class="flex flex-col sm:flex-row gap-4 justify-between mb-4">
@@ -174,7 +229,7 @@ const closeEditDialog = () => {
           @edit="handleEditTask"
         />
         <div v-if="!loading && totalTasks === 0" class="text-center py-8 text-base-content/60">
-          No tasks with this tag yet
+          Aucune tâche avec ce tag pour le moment
         </div>
       </section>
 
@@ -200,6 +255,13 @@ const closeEditDialog = () => {
       :task="taskToEdit"
       @close="closeEditDialog"
       @confirm="confirmEditTask"
+    />
+
+    <TagDeleteDialog
+      :open="showTagDeleteDialog"
+      :tag="tag"
+      @close="closeTagDeleteDialog"
+      @confirm="confirmDeleteTag"
     />
   </div>
 </template>

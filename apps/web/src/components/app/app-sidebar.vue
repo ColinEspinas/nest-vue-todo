@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { ref, useTemplateRef, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useTagsStore } from '@/stores/tags';
-import { DEFAULT_TAG_COLOR } from '@/config/tag-colors';
+import { DEFAULT_TAG_COLOR, getRandomTagColor } from '@/config/tag-colors';
 import UiButton from '../ui/ui-button.vue';
 import Avatar from 'vue-boring-avatars';
 import { Icon } from '@iconify/vue';
@@ -18,6 +19,66 @@ const { tags } = storeToRefs(tagsStore);
 const logoutHandler = () => {
   logout();
   router.push({ name: 'landing' });
+};
+
+// Inline tag creation
+const isCreatingTag = ref(false);
+const newTagName = ref('');
+const newTagColor = ref('');
+const newTagInputRef = useTemplateRef<HTMLInputElement>('newTagInput');
+
+/**
+ * Starts creating a new tag inline
+ */
+const startCreatingTag = async () => {
+  isCreatingTag.value = true;
+  newTagName.value = '';
+  newTagColor.value = getRandomTagColor();
+  await nextTick();
+  newTagInputRef.value?.focus();
+};
+
+/**
+ * Handles input to replace spaces with hyphens
+ */
+const handleTagNameInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const normalizedValue = target.value.replace(/\s+/g, '-');
+  if (target.value !== normalizedValue) {
+    target.value = normalizedValue;
+    newTagName.value = normalizedValue;
+  }
+};
+
+/**
+ * Saves the new tag
+ */
+const saveNewTag = async () => {
+  const trimmedName = newTagName.value.trim().replace(/\s+/g, '-');
+  if (!trimmedName) {
+    cancelCreatingTag();
+    return;
+  }
+
+  const newTag = await tagsStore.createTag({
+    name: trimmedName,
+    color: newTagColor.value,
+  });
+
+  if (newTag) {
+    router.push(`/tags/${newTag.id}`);
+  }
+
+  cancelCreatingTag();
+};
+
+/**
+ * Cancels tag creation
+ */
+const cancelCreatingTag = () => {
+  isCreatingTag.value = false;
+  newTagName.value = '';
+  newTagColor.value = '';
 };
 
 // Fetch tags when authenticated
@@ -36,18 +97,21 @@ watch(
 
 <template>
   <aside
-    class="flex flex-col justify-between overflow-hidden w-64 bg-base-200/50 rounded-3xl border-2 border-base-content-100/10"
+    class="flex flex-col overflow-hidden w-64 bg-base-200/50 rounded-3xl border-2 border-base-content-100/10"
   >
-    <div class="flex flex-col gap-4 p-2">
-      <!-- Logo/Brand -->
-      <div class="flex items-center justify-center gap-2 font-medium pr-2 py-2">
-        <div class="flex items-center justify-center p-1 rounded-lg bg-accent/20">
-          <Icon icon="ph:checks-bold" class="w-4 h-4 text-accent" />
-        </div>
-        <p class="text-lg font-bold">Checkmate</p>
+    <!-- Logo/Brand -->
+    <div
+      class="flex items-center justify-center gap-2 font-medium p-4 bg-base-100 border-b-2 border-base-content-100/10 flex-shrink-0"
+    >
+      <div class="flex items-center justify-center p-1 rounded-lg bg-accent/20">
+        <Icon icon="ph:checks-bold" class="w-4 h-4 text-accent" />
       </div>
-      <!-- Navigation Links -->
-      <nav class="flex flex-col gap-4" v-if="isAuthenticated">
+      <p class="text-lg font-bold">Checkmate</p>
+    </div>
+
+    <!-- Scrollable Navigation -->
+    <div class="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
+      <nav class="flex flex-col gap-4 px-2 py-4" v-if="isAuthenticated">
         <!-- Main Links -->
         <div class="flex flex-col gap-1">
           <RouterLink
@@ -70,7 +134,7 @@ watch(
               v-for="tag in tags"
               :key="tag.id"
               :to="`/tags/${tag.id}`"
-              class="flex items-center gap-3 px-3 py-2 rounded-lg border-2 border-transparent transition-colors font-medium"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium"
               active-class="bg-base-content-100/5"
             >
               <div
@@ -88,13 +152,55 @@ watch(
               </div>
               <span class="truncate">{{ tag.name }}</span>
             </RouterLink>
+
+            <!-- Inline tag creation -->
+            <div
+              v-if="isCreatingTag"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg bg-base-content-100/5 font-medium"
+            >
+              <div
+                class="flex items-center justify-center w-6 h-6 rounded-lg border flex-shrink-0"
+                :style="{
+                  backgroundColor: `${newTagColor}20`,
+                  borderColor: newTagColor,
+                }"
+              >
+                <Icon icon="ph:hash-bold" class="w-3 h-3" :style="{ color: newTagColor }" />
+              </div>
+              <input
+                ref="newTagInput"
+                v-model="newTagName"
+                @input="handleTagNameInput"
+                @keyup.enter="saveNewTag"
+                @keyup.escape="cancelCreatingTag"
+                @blur="saveNewTag"
+                placeholder="nom-du-tag"
+                class="flex-1 bg-transparent outline-none min-w-0 placeholder:text-base-content-100/60"
+              />
+            </div>
+
+            <!-- Add tag button -->
+            <button
+              v-else
+              @click="startCreatingTag"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg font-medium hover:bg-base-content-100/5 transition-colors cursor-pointer"
+            >
+              <div
+                class="flex items-center justify-center w-6 h-6 rounded-lg border border-dashed border-base-content-100/30 flex-shrink-0"
+              >
+                <Icon icon="ph:plus-bold" class="w-3 h-3 text-base-content-100/60" />
+              </div>
+              <span class="truncate text-base-content-100/60">Ajouter un tag</span>
+            </button>
           </div>
         </div>
       </nav>
     </div>
 
     <!-- User Profile / Auth Section -->
-    <div class="flex flex-col gap-3 p-4 bg-base-100 border-t-2 border-base-content-100/10">
+    <div
+      class="flex flex-col gap-3 p-4 bg-base-100 border-t-2 border-base-content-100/10 flex-shrink-0"
+    >
       <template v-if="isAuthenticated && user">
         <div class="flex gap-2 items-center">
           <Avatar :name="user?.email || 'User'" :size="34" variant="marble" />
