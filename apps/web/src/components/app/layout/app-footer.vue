@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import UiButton from '../ui/ui-button.vue';
-import ThemeToggle from './theme-toggle.vue';
-import LanguageSwitcher from './language-switcher.vue';
+import UiButton from '../../ui/ui-button.vue';
+import ThemeToggle from '../controls/theme-toggle.vue';
+import LanguageSwitcher from '../controls/language-switcher.vue';
 </script>
 
 <template>

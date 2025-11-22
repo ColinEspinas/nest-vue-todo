@@ -7,7 +7,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useTasksStore } from '@/stores/tasks';
 import { useTagsStore } from '@/stores/tags';
 import { orderValues, type CreateTask, type Order, type UpdateTask } from '@/types/task';
-import ErrorMessage from '@/components/app/error-message.vue';
+import ErrorMessage from '@/components/app/common/error-message.vue';
 import TaskCreateForm from '@/components/app/forms/task-create-form.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';

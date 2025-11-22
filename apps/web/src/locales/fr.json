@@ -154,9 +154,11 @@
       "errorMessage": "Échec de la mise à jour du profil. Veuillez réessayer."
     },
     "language": {
-      "label": "Préférence de langue"
+      "label": "Préférence de langue",
+      "description": "Choisissez votre langue préférée pour l'application"
     },
-    "appearance": "Apparence"
+    "appearance": "Apparence",
+    "appearanceDescription": "Personnalisez le thème visuel de l'application"
   },
   "common": {
     "loading": "Chargement...",

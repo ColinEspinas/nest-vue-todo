@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useTasksStore } from '@/stores/tasks';
 import { useTagsStore } from '@/stores/tags';
 import { orderValues, type Order, type UpdateTask } from '@/types/task';
-import ErrorMessage from '@/components/app/error-message.vue';
+import ErrorMessage from '@/components/app/common/error-message.vue';
 import TaskDeleteDialog from '@/components/app/dialogs/task-delete-dialog.vue';
 import TaskList from '@/components/app/tasks/task-list.vue';
 import TaskListSkeleton from '@/components/app/skeletons/task-list-skeleton.vue';

@@ -2,7 +2,7 @@
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import SignUpForm from '@/components/app/forms/sign-up-form.vue';
-import ErrorMessage from '@/components/app/error-message.vue';
+import ErrorMessage from '@/components/app/common/error-message.vue';
 import { ref } from 'vue';
 
 const authStore = useAuthStore();

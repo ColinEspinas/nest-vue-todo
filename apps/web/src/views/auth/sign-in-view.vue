@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import SignInForm from '@/components/app/forms/sign-in-form.vue';
 import { ref } from 'vue';
-import ErrorMessage from '@/components/app/error-message.vue';
+import ErrorMessage from '@/components/app/common/error-message.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();

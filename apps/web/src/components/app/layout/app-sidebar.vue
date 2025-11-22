@@ -7,7 +7,7 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import { useTagsStore } from '@/stores/tags';
 import { DEFAULT_TAG_COLOR, getRandomTagColor } from '@/config/tag-colors';
-import UiButton from '../ui/ui-button.vue';
+import UiButton from '../../ui/ui-button.vue';
 import AppLogo from './app-logo.vue';
 import Avatar from 'vue-boring-avatars';
 import { Icon } from '@iconify/vue';

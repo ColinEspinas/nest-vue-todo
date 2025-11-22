@@ -154,9 +154,11 @@
       "errorMessage": "Failed to update profile. Please try again."
     },
     "language": {
-      "label": "Language preference"
+      "label": "Language preference",
+      "description": "Choose your preferred language for the application"
     },
-    "appearance": "Appearance"
+    "appearance": "Appearance",
+    "appearanceDescription": "Customize the visual theme of the application"
   },
   "common": {
     "loading": "Loading...",

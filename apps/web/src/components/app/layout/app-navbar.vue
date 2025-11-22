@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
-import UiButton from '../ui/ui-button.vue';
+import UiButton from '../../ui/ui-button.vue';
 import AppLogo from './app-logo.vue';
 import Avatar from 'vue-boring-avatars';
 
