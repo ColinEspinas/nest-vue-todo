@@ -11,8 +11,18 @@
   --color-base-content-300: rgb(130, 130, 130);
   --color-success: rgb(100, 230, 50);
   --color-error: rgb(244, 67, 54);
+  --color-warning: rgb(255, 152, 0);
 
   --font-sans: 'Hanken Grotesk Variable', sans-serif;
+}
+
+:root.dark {
+  --color-base-100: rgb(30, 30, 30);
+  --color-base-200: rgb(40, 40, 40);
+  --color-base-300: rgb(60, 60, 60);
+  --color-base-content-100: rgb(230, 230, 230);
+  --color-base-content-200: rgb(180, 180, 180);
+  --color-base-content-300: rgb(130, 130, 130);
 }
 
 @layer base {

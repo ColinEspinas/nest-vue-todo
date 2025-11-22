@@ -5,6 +5,15 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkmate - Todo App</title>
+    <script>
+      // Prevent dark mode flicker by applying theme class before render
+      (function() {
+        const theme = localStorage.getItem('vueuse-color-scheme') || 'auto';
+        if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

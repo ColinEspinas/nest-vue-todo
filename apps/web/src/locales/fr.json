@@ -155,7 +155,8 @@
     },
     "language": {
       "label": "Préférence de langue"
-    }
+    },
+    "appearance": "Apparence"
   },
   "common": {
     "loading": "Chargement...",
@@ -164,7 +165,13 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "delete": "Supprimer",
-    "update": "Modifier"
+    "update": "Modifier",
+    "theme": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "themeLabel": "Thème"
   },
   "validation": {
     "email": {

@@ -4,9 +4,9 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import { useFormValidation } from '@/composables/use-form-validation';
 import { updateProfileSchema } from '@/schemas';
+import { toast } from 'vue-sonner';
 import UiButton from '@/components/ui/ui-button.vue';
 import UiInput from '@/components/ui/ui-input.vue';
-import LanguageSwitcher from '@/components/app/language-switcher.vue';
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -15,8 +15,6 @@ const { validate, getError, resetErrors } = useFormValidation(updateProfileSchem
 const name = ref(authStore.user?.name || '');
 const email = ref(authStore.user?.email || '');
 const loading = ref(false);
-const successMessage = ref('');
-const errorMessage = ref('');
 
 watch(
   () => authStore.user,
@@ -30,8 +28,6 @@ watch(
 );
 
 const handleSubmit = async () => {
-  successMessage.value = '';
-  errorMessage.value = '';
   resetErrors();
 
   const formData = { name: name.value, email: email.value };
@@ -40,13 +36,9 @@ const handleSubmit = async () => {
   loading.value = true;
   try {
     await authStore.updateProfile(formData);
-    successMessage.value = t('settings.profile.successMessage');
-    setTimeout(() => {
-      successMessage.value = '';
-    }, 3000);
+    toast.success(t('settings.profile.successMessage'));
   } catch (error) {
-    errorMessage.value =
-      error instanceof Error ? error.message : t('settings.profile.errorMessage');
+    toast.error(error instanceof Error ? error.message : t('settings.profile.errorMessage'));
   } finally {
     loading.value = false;
   }
@@ -54,16 +46,14 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <section
-    class="flex flex-col mb-4 bg-base-200/50 p-4 rounded-3xl border-2 border-base-content-100/10"
-  >
-    <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-4">
-      <div class="flex flex-col gap-1">
-        <h2 class="font-bold text-2xl">{{ t('settings.profile.title') }}</h2>
-        <p>{{ t('settings.profile.description') }}</p>
-      </div>
+  <section class="bg-base-100 border-2 border-base-300 p-6 rounded-2xl flex flex-col gap-6">
+    <div class="flex flex-col gap-1">
+      <h2 class="font-bold text-xl">{{ t('settings.profile.title') }}</h2>
+      <p class="text-base-content-200 text-sm">{{ t('settings.profile.description') }}</p>
+    </div>
 
-      <form class="flex flex-col gap-2" @submit.prevent="handleSubmit">
+    <form class="flex flex-col gap-6" @submit.prevent="handleSubmit">
+      <div class="flex flex-col gap-4">
         <UiInput
           v-model="name"
           name="name"
@@ -80,27 +70,18 @@ const handleSubmit = async () => {
           :placeholder="t('settings.profile.emailPlaceholder')"
           :error="getError('email')"
         />
-        <div v-if="successMessage" class="text-success text-sm p-2 bg-success/10 rounded-lg">
-          {{ successMessage }}
-        </div>
-        <div v-if="errorMessage" class="text-error text-sm p-2 bg-error/10 rounded-lg">
-          {{ errorMessage }}
-        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
         <UiButton
           after-icon="ph:floppy-disk-bold"
           :text="t('settings.profile.saveButton')"
           variant="accent"
-          class="min-w-max"
-          align="center"
           type="submit"
+          :loading="loading"
           :disabled="loading"
         />
-      </form>
-    </div>
-    <!-- Language Preference Container -->
-    <div class="bg-base-100 border-2 border-base-300 p-4 rounded-2xl flex flex-col gap-2 mt-4">
-      <h2 class="font-bold text-xl">{{ t('settings.language.label') }}</h2>
-      <LanguageSwitcher />
-    </div>
+      </div>
+    </form>
   </section>
 </template>

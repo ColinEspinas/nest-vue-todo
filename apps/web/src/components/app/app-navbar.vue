@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '@/stores/auth';
 import UiButton from '../ui/ui-button.vue';
 import AppLogo from './app-logo.vue';
-import LanguageSwitcher from './language-switcher.vue';
 import Avatar from 'vue-boring-avatars';
 
 const { t } = useI18n();
@@ -58,7 +57,6 @@ const logoutHandler = () => {
         <UiButton :text="t('nav.signIn')" to="/sign-in" variant="secondary" />
         <UiButton :text="t('nav.signUp')" to="/sign-up" variant="accent" />
       </template>
-      <LanguageSwitcher />
     </div>
   </header>
 </template>
