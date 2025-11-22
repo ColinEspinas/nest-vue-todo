@@ -7,6 +7,7 @@ const { t, locale } = useI18n();
 
 defineProps<{
   deadline: Date | string;
+  isCompleted?: boolean;
 }>();
 
 const formatDate = (date: Date | string) => {
@@ -17,7 +18,8 @@ const formatDate = (date: Date | string) => {
   });
 };
 
-const isOverdue = (date: Date | string) => {
+const isOverdue = (date: Date | string, isCompleted?: boolean) => {
+  if (isCompleted) return false;
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const overdueDate = new Date(dateObj);
   overdueDate.setHours(0, 0, 0, 0);
@@ -52,8 +54,8 @@ const getTooltipContent = (date: Date | string) => {
     <UiTag
       :label="formatDate(deadline)"
       icon="ph:clock-bold"
-      :icon-color="isOverdue(deadline) ? 'text-error' : 'text-accent'"
-      :text-color="isOverdue(deadline) ? 'text-error' : 'text-base-content-200'"
+      :icon-color="isOverdue(deadline, isCompleted) ? 'text-error' : 'text-accent'"
+      :text-color="isOverdue(deadline, isCompleted) ? 'text-error' : 'text-base-content-200'"
     />
   </UiTooltip>
 </template>

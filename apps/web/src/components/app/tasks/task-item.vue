@@ -85,7 +85,7 @@ const createdUpdatedDifference = computed(() => {
     <footer class="flex items-center flex-wrap gap-2 text-xs text-base-content-300">
       <CreatedAtChip :created-at="task.createdAt" />
       <UpdatedAtChip v-if="createdUpdatedDifference !== 0" :updated-at="task.updatedAt" />
-      <DeadlineChip v-if="task.deadline" :deadline="task.deadline" />
+      <DeadlineChip v-if="task.deadline" :deadline="task.deadline" :is-completed="task.completed" />
       <PriorityChip :priority="task.priority" />
     </footer>
   </article>
