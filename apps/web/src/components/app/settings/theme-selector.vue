@@ -23,11 +23,11 @@ const selectMode = (newMode: 'light' | 'dark' | 'auto') => {
     <button
       v-for="option in options"
       :key="option.value"
-      class="flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+      class="flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ring-0"
       :class="[
         mode === option.value
-          ? 'bg-base-200 border-accent text-accent'
-          : 'bg-base-100 border-base-300 hover:border-base-content-100/20 text-base-content-200',
+          ? 'bg-base-200 border-accent text-accent ring-accent/20 hover:ring-3'
+          : 'bg-base-100 border-base-300 hover:border-base-content-100/20 text-base-content-200 ring-base-content-100/10 hover:ring-3',
       ]"
       @click="selectMode(option.value as 'light' | 'dark' | 'auto')"
     >
