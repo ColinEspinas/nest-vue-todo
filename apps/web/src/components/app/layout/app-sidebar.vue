@@ -121,7 +121,7 @@ watch(
         <div class="flex flex-col gap-1">
           <RouterLink
             to="/tasks"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all font-medium hover:bg-base-content-100/5"
             active-class="bg-base-content-100/5"
           >
             <Icon icon="ph:list-checks-bold" class="w-5 h-5" />
@@ -139,7 +139,7 @@ watch(
               v-for="tag in tags"
               :key="tag.id"
               :to="`/tags/${tag.id}`"
-              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all font-medium hover:bg-base-content-100/5"
               active-class="bg-base-content-100/5"
             >
               <div
@@ -189,7 +189,7 @@ watch(
             <button
               v-else
               @click="startCreatingTag"
-              class="flex items-center gap-3 px-3 py-2 rounded-lg font-medium hover:bg-base-content-100/5 transition-colors cursor-pointer"
+              class="flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition-all cursor-pointer hover:bg-base-content-100/5"
             >
               <div
                 class="flex items-center justify-center w-6 h-6 rounded-lg border border-dashed border-base-content-100/30 flex-shrink-0"
@@ -207,7 +207,7 @@ watch(
     <div v-if="isAuthenticated" class="flex flex-col gap-1 px-2 py-3 flex-shrink-0">
       <RouterLink
         to="/settings"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium text-base-content/60 hover:text-base-content hover:bg-base-content-100/5 text-base-content-100/60"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg transition-all font-medium text-base-content/60 hover:text-base-content hover:bg-base-content-100/5 text-base-content-100/60"
         active-class="!text-base-content bg-base-content-100/5"
       >
         <Icon icon="ph:gear-bold" class="w-5 h-5" />
