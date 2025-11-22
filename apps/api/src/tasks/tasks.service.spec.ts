@@ -31,6 +31,7 @@ describe('TasksService', () => {
     title: 'New Task',
     description: 'New task description',
     priority: 'high',
+    tagIds: [],
   };
 
   const mockUpdateTaskDto: UpdateTaskDto = {
@@ -85,6 +86,7 @@ describe('TasksService', () => {
         10,
         0,
         'created_desc',
+        undefined,
       );
       expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });
@@ -100,6 +102,7 @@ describe('TasksService', () => {
         10,
         0,
         'created_desc',
+        undefined,
       );
     });
 
@@ -109,7 +112,13 @@ describe('TasksService', () => {
       const orders: Order[] = ['created_asc', 'deadline_desc', 'priority_asc'];
       for (const order of orders) {
         await tasksService.findAllByUserId(mockUserId, 10, 0, order);
-        expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, order);
+        expect(tasksRepository.findAllByUserId).toHaveBeenCalledWith(
+          mockUserId,
+          10,
+          0,
+          order,
+          undefined,
+        );
       }
     });
   });
@@ -130,6 +139,7 @@ describe('TasksService', () => {
         limit,
         offset,
         order,
+        undefined,
       );
       expect(tasksRepository.findAllByUserId).toHaveBeenCalledTimes(1);
     });

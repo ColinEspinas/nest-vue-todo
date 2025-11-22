@@ -34,6 +34,7 @@ describe('TasksController', () => {
     title: 'New Task',
     description: 'New task description',
     priority: 'high',
+    tagIds: [],
   };
 
   const mockUpdateTaskDto: UpdateTaskDto = {
@@ -86,7 +87,13 @@ describe('TasksController', () => {
       const defaultQueryDto = new FindTasksQueryDto();
       const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual(mockTasks);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, 'created_desc');
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        10,
+        0,
+        'created_desc',
+        undefined,
+      );
     });
 
     it('should return empty array when user has no tasks', async () => {
@@ -94,7 +101,13 @@ describe('TasksController', () => {
       const defaultQueryDto = new FindTasksQueryDto();
       const result = await tasksController.findAll(mockRequest, defaultQueryDto);
       expect(result).toEqual([]);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, 'created_desc');
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        10,
+        0,
+        'created_desc',
+        undefined,
+      );
     });
 
     it('should support different order values', async () => {
@@ -107,7 +120,13 @@ describe('TasksController', () => {
         queryDto.offset = 0;
         queryDto.order = order;
         await tasksController.findAll(mockRequest, queryDto);
-        expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, 10, 0, order);
+        expect(tasksService.findAllByUserId).toHaveBeenCalledWith(
+          mockUserId,
+          10,
+          0,
+          order,
+          undefined,
+        );
       }
     });
   });
@@ -125,7 +144,13 @@ describe('TasksController', () => {
       queryDto.order = order;
       const result = await tasksController.findAll(mockRequest, queryDto);
       expect(result).toEqual(mockTasks);
-      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(mockUserId, limit, offset, order);
+      expect(tasksService.findAllByUserId).toHaveBeenCalledWith(
+        mockUserId,
+        limit,
+        offset,
+        order,
+        undefined,
+      );
       expect(tasksService.findAllByUserId).toHaveBeenCalledTimes(1);
     });
   });
@@ -185,6 +210,7 @@ describe('TasksController', () => {
         title: 'Minimal Task',
         description: 'Minimal description',
         priority: 'low' as const,
+        tagIds: [],
       };
       const minimalTask = new Task(
         'minimal-task-id',
@@ -211,6 +237,7 @@ describe('TasksController', () => {
         description: 'Task with deadline description',
         priority: 'high' as const,
         deadline: new Date('2024-12-31T23:59:59.000Z'),
+        tagIds: [],
       };
       const taskWithDeadline = new Task(
         'deadline-task-id',
@@ -236,6 +263,7 @@ describe('TasksController', () => {
         title: 'High Priority Task',
         description: 'Important task',
         priority: 'high' as const,
+        tagIds: [],
       };
       const highPriorityTask = new Task(
         'high-priority-id',
@@ -263,6 +291,7 @@ describe('TasksController', () => {
         title: '',
         description: 'Valid description',
         priority: 'high' as const,
+        tagIds: [],
       };
 
       expect(() => {
@@ -277,6 +306,7 @@ describe('TasksController', () => {
         title: 'a'.repeat(51),
         description: 'Valid description',
         priority: 'high' as const,
+        tagIds: [],
       };
 
       expect(() => {
@@ -291,6 +321,7 @@ describe('TasksController', () => {
         title: 'Valid title',
         description: 'Valid description',
         priority: 'urgent',
+        tagIds: [],
       };
 
       expect(() => {
