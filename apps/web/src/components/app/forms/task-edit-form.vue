@@ -68,6 +68,13 @@ function handleTagSelected(tagName: string, hashtagStart: number) {
   }
 }
 
+function handleTagSelector(tagId: string) {
+  const tag = tags.value.find((t) => t.id === tagId);
+  if (tag) {
+    addTag(tag.name);
+  }
+}
+
 const handleSubmit = async () => {
   const formData = {
     title: title.value.trim(),
@@ -131,12 +138,17 @@ watch(
         @enable-detection="enableDetection"
       />
 
-      <TagBadges
-        :tags="extractedTags"
-        :max-tags="3"
-        :get-tag-color="getTagColor"
-        @remove-tag="removeTag"
-      />
+      <div class="flex flex-wrap gap-1.5 px-3 pb-2">
+        <TagBadges
+          :tags="extractedTags"
+          :max-tags="3"
+          :get-tag-color="getTagColor"
+          :available-tags="tags"
+          :can-add-more-tags="canAddMoreTags"
+          @remove-tag="removeTag"
+          @select="handleTagSelector"
+        />
+      </div>
 
       <div class="flex justify-between items-center px-3 pb-3">
         <span class="text-xs text-base-content-300">

@@ -210,13 +210,13 @@ function handleSelect(ev: CustomEvent) {
         position="popper"
         side="bottom"
         align="start"
-        class="z-50 max-h-48 max-w-80 bg-base-100 border-2 border-base-content-100/20 p-1.5 rounded-lg shadow-lg overflow-y-auto"
+        class="z-50 max-h-48 max-w-80 bg-base-100 border-2 border-base-content-100/20 rounded-lg shadow-lg overflow-y-auto"
       >
         <ComboboxItem
           v-for="tag in filteredTags"
           :key="tag.id"
           :value="tag.name"
-          class="px-3 py-2 data-[highlighted]:bg-base-200 rounded-md flex items-center gap-2 cursor-pointer"
+          class="px-3 py-2 data-[highlighted]:bg-base-200 flex items-center gap-2 cursor-pointer outline-none"
           @select="handleSelect"
         >
           <TagChip :tag="tag" />

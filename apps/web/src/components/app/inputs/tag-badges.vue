@@ -1,24 +1,29 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import TagSelect from '@/components/app/inputs/tag-select.vue';
 import type { ExtractedTag } from '@/composables/use-hashtag-tags';
+import type { Tag } from '@/types/task';
 
 interface Props {
   tags: ExtractedTag[];
   maxTags?: number;
   getTagColor: (tag: ExtractedTag) => string;
+  availableTags: Tag[];
+  canAddMoreTags: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   maxTags: 3,
 });
 
-defineEmits<{
+const emit = defineEmits<{
   'remove-tag': [tagName: string];
+  select: [tagId: string];
 }>();
 </script>
 
 <template>
-  <div v-if="tags.length" class="flex flex-wrap gap-1.5 px-3 pb-2">
+  <div class="flex flex-wrap gap-1.5">
     <span
       v-for="tag in tags"
       :key="tag.name"
@@ -34,11 +39,17 @@ defineEmits<{
       <button
         type="button"
         class="hover:opacity-70 transition-opacity cursor-pointer"
-        @click="$emit('remove-tag', tag.name)"
+        @click="emit('remove-tag', tag.name)"
       >
         <Icon icon="ph:x" class="w-2.5 h-2.5" />
       </button>
     </span>
-    <span class="text-xs text-base-content-300 self-center"> {{ tags.length }}/{{ maxTags }} </span>
+    <TagSelect
+      :available-tags="availableTags"
+      :extracted-tags="tags"
+      :can-add-more-tags="canAddMoreTags"
+      @select="emit('select', $event)"
+    />
+    <span class="text-xs text-base-content-300 self-center">{{ tags.length }}/{{ maxTags }}</span>
   </div>
 </template>

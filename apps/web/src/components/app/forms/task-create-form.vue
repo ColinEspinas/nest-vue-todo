@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
@@ -7,11 +7,13 @@ import PrioritySelect from '@/components/app/inputs/priority-select.vue';
 import DatePicker from '@/components/app/inputs/date-picker.vue';
 import HashtagTagInput from '@/components/app/inputs/hashtag-tag-input.vue';
 import TagBadges from '@/components/app/inputs/tag-badges.vue';
+import TagSelect from '@/components/app/inputs/tag-select.vue';
 import { useFormValidation } from '@/composables/use-form-validation';
 import { useHashtagTags } from '@/composables/use-hashtag-tags';
 import { createTaskSchema } from '@/schemas';
 import { useTagsStore } from '@/stores/tags';
 import type { CreateTask } from '@/types/task';
+import { DEFAULT_TAG_COLOR } from '@/config/tag-colors';
 
 const { t } = useI18n();
 
@@ -93,6 +95,13 @@ async function handleSubmit() {
   emit('submit', formData, tagsToCreate.value);
   resetForm();
 }
+
+function handleTagSelector(tagId: string) {
+  const tag = tags.value.find((t) => t.id === tagId);
+  if (tag) {
+    addTag(tag.name);
+  }
+}
 </script>
 
 <template>
@@ -121,12 +130,17 @@ async function handleSubmit() {
         @enable-detection="enableDetection"
       />
 
-      <TagBadges
-        :tags="extractedTags"
-        :max-tags="3"
-        :get-tag-color="getTagColor"
-        @remove-tag="removeTag"
-      />
+      <div class="flex flex-wrap gap-1.5 px-3 pb-2">
+        <TagBadges
+          :tags="extractedTags"
+          :max-tags="3"
+          :get-tag-color="getTagColor"
+          :available-tags="tags"
+          :can-add-more-tags="canAddMoreTags"
+          @remove-tag="removeTag"
+          @select="handleTagSelector"
+        />
+      </div>
 
       <div class="flex justify-between items-center px-3 pb-3">
         <span class="text-xs text-base-content-300"
