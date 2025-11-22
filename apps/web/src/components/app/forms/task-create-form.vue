@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import UiButton from '@/components/ui/ui-button.vue';
@@ -7,13 +7,11 @@ import PrioritySelect from '@/components/app/inputs/priority-select.vue';
 import DatePicker from '@/components/app/inputs/date-picker.vue';
 import HashtagTagInput from '@/components/app/inputs/hashtag-tag-input.vue';
 import TagBadges from '@/components/app/inputs/tag-badges.vue';
-import TagSelect from '@/components/app/inputs/tag-select.vue';
 import { useFormValidation } from '@/composables/use-form-validation';
 import { useHashtagTags } from '@/composables/use-hashtag-tags';
 import { createTaskSchema } from '@/schemas';
 import { useTagsStore } from '@/stores/tags';
 import type { CreateTask } from '@/types/task';
-import { DEFAULT_TAG_COLOR } from '@/config/tag-colors';
 
 const { t } = useI18n();
 
